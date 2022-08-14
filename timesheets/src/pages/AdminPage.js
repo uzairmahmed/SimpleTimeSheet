@@ -7,7 +7,8 @@ import UserCard from '../components/UserCard';
 import paddings from '../styles/styles';
 
 import getEmployeeList from '../firebase/Functions';
-import TimesheetAdminView from '../components/TimesheetAdminView';
+import TimesheetView from '../components/admin/TimesheetView';
+import EmployeeView from '../components/admin/EmployeeView';
 
 export default function UserPage(props) {
     const [employees, setEmployees] = useState([]);
@@ -31,7 +32,6 @@ export default function UserPage(props) {
                 <Center p='25' bg='red'></Center>
                 <Center p='25' bg='blue'></Center>
             </HStack>
-            <Spacer />
 
             <Tabs>
                 <TabList>
@@ -41,13 +41,13 @@ export default function UserPage(props) {
 
                 <TabPanels>
                     <TabPanel>
-                        <TimesheetAdminView />
+                        <TimesheetView />
                     </TabPanel>
                     <TabPanel>
-                    <p>List all Employees Here</p>
+                        <EmployeeView/>
                     </TabPanel>
                 </TabPanels>
-                </Tabs>
+            </Tabs>
             <Spacer />
 
             <HStack w="100%" bg='black' justify={'space-between'}>

@@ -1,11 +1,11 @@
-import { getDatabase, ref, child, get } from "firebase/database";
+import { getDatabase, ref, child, get, set } from "firebase/database";
 
 
-async function getEmployeeList() {
+export async function getEmployeeList() {
     const dbRef = ref(getDatabase());
     return get(child(dbRef, `employees`)).then((snapshot) => {
         if (snapshot.exists()) {
-            return(snapshot.val())
+            return (snapshot.val())
         } else {
             return []
         }
@@ -14,4 +14,7 @@ async function getEmployeeList() {
     });
 }
 
-export default getEmployeeList
+export async function writeUserData(data, name, email, imageUrl) {
+    const db = getDatabase();
+    set(ref(db, 'employees/' + data.id), data);
+}

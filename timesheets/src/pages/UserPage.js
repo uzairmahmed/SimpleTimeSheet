@@ -6,15 +6,15 @@ import UserCard from '../components/UserCard';
 
 import paddings from '../styles/styles';
 
-import getEmployeeList from '../firebase/Functions';
+import {getEmployeeList} from '../firebase/Functions';
 
 export default function UserPage(props) {
     const [employees, setEmployees] = useState([]);
 
     async function handleEmployees() {
-        // const tempEmployees = await getEmployeeList()
-        // console.log(tempEmployees)
-        // setEmployees(tempEmployees)
+        const tempEmployees = await getEmployeeList()
+        console.log(tempEmployees)
+        setEmployees(tempEmployees)
     }
 
     useEffect(() => {
