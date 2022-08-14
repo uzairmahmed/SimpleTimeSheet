@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 
 import UserPage from './UserPage'
+import AdminPage from './AdminPage'
 import WhoopsPage from './WhoopsPage'
 
 export default function Main() {
@@ -14,6 +15,11 @@ export default function Main() {
     if (page === 0) {
         return (
             <UserPage navigatePage={(num) => navigatePage(num)} />
+        )
+    }
+    else if (page === 1) {
+        return (
+            <AdminPage navigatePage={(num) => navigatePage(num)} />
         )
     }
     else {
