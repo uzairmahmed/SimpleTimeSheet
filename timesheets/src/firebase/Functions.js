@@ -1,4 +1,6 @@
-import { getDatabase, ref, child, get, set } from "firebase/database";
+import { getDatabase, ref, child, get, set, remove } from "firebase/database";
+
+// https://firebase.google.com/docs/database/web/start
 
 export async function getEmployeeList() {
     const dbRef = ref(getDatabase());
@@ -15,6 +17,10 @@ export async function getEmployeeList() {
 
 export async function writeUserData(data) {
     const db = getDatabase();
-    console.log(data.id)
     set(ref(db, 'employees/' + data.id), data);
+}
+
+export async function deleteUserData(id) {
+    const db = getDatabase();
+    remove(ref(db, 'employees/' + id))
 }

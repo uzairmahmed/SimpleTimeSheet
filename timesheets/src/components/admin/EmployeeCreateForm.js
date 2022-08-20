@@ -27,10 +27,10 @@ export default function TimesheetAdminView(props) {
     return (
         <Formik
             initialValues={{
-                name: props.employee.name,
-                pay: props.employee.pay,
-                id: props.employee.id,
-                notes: props.employee.notes
+                name: '',
+                pay: '',
+                id: props.id,
+                notes: ''
             }}
 
             onSubmit={(values) => {
@@ -43,7 +43,7 @@ export default function TimesheetAdminView(props) {
                     {({ field, form }) => (
                         <FormControl>
                             <FormLabel>Name</FormLabel>
-                            <Input {...field} id="name" defaultValue={props.employee.name} type='text' />
+                            <Input {...field} id="name" defaultValue={''} type='text' />
                         </FormControl>
                     )}
                 </Field>
@@ -52,7 +52,7 @@ export default function TimesheetAdminView(props) {
                     {({ field, form }) => (
                         <FormControl>
                             <FormLabel>Pay</FormLabel>
-                            <Input {...field} id="pay" type='text' defaultValue={props.employee.pay} />
+                            <Input {...field} id="pay" type='text' defaultValue={''} />
                         </FormControl>
                     )}
                 </Field>
@@ -61,7 +61,7 @@ export default function TimesheetAdminView(props) {
                     {({ field, form }) => (
                         <FormControl>
                             <FormLabel>Employee ID</FormLabel>
-                            <Input disabled={true} {...field} id="id" defaultValue={props.employee.id} type='text' />
+                            <Input disabled={true} {...field} id="id" defaultValue={props.id} type='text' />
                         </FormControl>
                     )}
                 </Field>
@@ -70,7 +70,7 @@ export default function TimesheetAdminView(props) {
                     {({ field, form }) => (
                         <FormControl>
                             <FormLabel>Notes</FormLabel>
-                            <Input {...field} id="notes" defaultValue={props.employee.notes} type='text' />
+                            <Input {...field} id="notes" defaultValue={''} type='text' />
                         </FormControl>
                     )}
                 </Field>
@@ -79,11 +79,11 @@ export default function TimesheetAdminView(props) {
                         m={5}
                         type='submit'
                         isLoading={isLoading}
-                        loadingText='Saving'
+                        loadingText='Creating User'
                         colorScheme='teal'
                         variant='outline'
                     >
-                        Save Employee
+                        Create Employee
                     </Button>
                 </Center>
             </Form>
