@@ -5,7 +5,6 @@ import { Center, SimpleGrid, HStack, Flex, Spacer, VStack, Text, Button } from '
 import UserCard from '../components/UserCard';
 
 import paddings from '../styles/styles';
-
 import {getEmployeeList} from '../firebase/Functions';
 
 export default function UserPage(props) {
@@ -13,8 +12,8 @@ export default function UserPage(props) {
 
     async function handleEmployees() {
         const tempEmployees = await getEmployeeList()
-        console.log(tempEmployees)
-        setEmployees(tempEmployees)
+        const dataobject = Object.keys(tempEmployees).map((key) => tempEmployees[key])
+        setEmployees(dataobject)
     }
 
     useEffect(() => {

@@ -1,28 +1,16 @@
 import React, { useState, useEffect } from 'react'
 
-import { Center, SimpleGrid, HStack, Flex, Spacer, VStack, Text, Button, Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
+import {
+    Center, HStack, Flex, Spacer, VStack, Text, Button,
+    Tabs, TabList, TabPanels, Tab, TabPanel
+} from '@chakra-ui/react'
 
-import UserCard from '../components/UserCard';
-
-import paddings from '../styles/styles';
-
-import getEmployeeList from '../firebase/Functions';
 import TimesheetView from '../components/admin/TimesheetView';
 import EmployeeView from '../components/admin/EmployeeView';
 
-export default function UserPage(props) {
-    const [employees, setEmployees] = useState([]);
+import getEmployeeList from '../firebase/Functions';
 
-    async function handleEmployees() {
-        // const tempEmployees = await getEmployeeList()
-        // console.log(tempEmployees)
-        // setEmployees(tempEmployees)
-    }
-
-    useEffect(() => {
-        handleEmployees()
-    }, []);
-
+export default function AdminPage(props) {   
     return (
         <Flex direction={'column'} h='100vh'>
             <HStack w="100%" bg='black' justify={'space-between'}>
@@ -44,7 +32,7 @@ export default function UserPage(props) {
                         <TimesheetView />
                     </TabPanel>
                     <TabPanel>
-                        <EmployeeView/>
+                        <EmployeeView />
                     </TabPanel>
                 </TabPanels>
             </Tabs>

@@ -1,29 +1,16 @@
-import {
-    Box, Button, Center, HStack, VStack, Accordion,
-    AccordionItem,
-    AccordionButton,
-    AccordionPanel,
-    AccordionIcon,
-    Text,
-    IconButton,
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
-} from '@chakra-ui/react'
-
-import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
-
 import React, { useState, useEffect } from 'react'
-import paddings from '../../styles/styles'
+import {
+    Box, Center, HStack, VStack, Text,IconButton,
+    Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon,
+    Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton,
+} from '@chakra-ui/react'
+import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
 
 import EmployeeEditForm from './EmployeeEditForm'
 
+import { getEmployeeList } from '../../firebase/Functions';
 
-export default function TimesheetAdminView(props) {
+export default function EmployeeView(props) {
     const [data, setdata] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
     const [temployee, settemployee] = useState({
@@ -32,36 +19,30 @@ export default function TimesheetAdminView(props) {
         "pay": 0,
         "notes": "Loading"
     });
-
-
-    const testEmployeeList = [
-        {
-            "name": "Uzair Ahmed",
-            "id": 12312312312,
-            "pay": 21,
-            "notes": ""
-        },
-        {
-            "name": "Shiza Ahmed",
-            "id": 12312312312,
-            "pay": 14,
-            "notes": ""
-        }
-    ]
-
+    
     useEffect(() => {
-        setdata(testEmployeeList)
-        console.log(data)
+        handleEmployees()
     }, []);
 
+    async function handleEmployees() {
+        const tempEmployees = await getEmployeeList()
+        const dataobject = Object.keys(tempEmployees).map((key) => tempEmployees[key])
+        setdata(dataobject)
+    }
+
     function handleEdit(employee) {
-        console.log(employee)
+        settemployee(employee)
+        setIsOpen(true)
+    }
+
+    function handleDelete(employee) {
         settemployee(employee)
         setIsOpen(true)
     }
 
     function onClose() {
         setIsOpen(false)
+        handleEmployees()
     }
 
     return (
@@ -72,7 +53,7 @@ export default function TimesheetAdminView(props) {
                     <ModalHeader>Modal Title</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        <EmployeeEditForm employee={temployee} />
+                        <EmployeeEditForm onclose={() => onClose()} employee={temployee} />
                     </ModalBody>
                 </ModalContent>
             </Modal>

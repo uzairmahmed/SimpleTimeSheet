@@ -1,90 +1,89 @@
+
+import React, { useState, useEffect } from 'react'
+import { Formik, Form, Field } from 'formik';
 import {
     FormControl,
     FormLabel,
-    NumberInput,
-    NumberInputField,
-    NumberInputStepper,
-    NumberIncrementStepper,
-    NumberDecrementStepper,
     Input,
     Button,
 } from '@chakra-ui/react'
 
-import React, { useState, useEffect } from 'react'
-import paddings from '../../styles/styles'
-
-import TimesheetAdminChart from './TimesheetChart'
 import { writeUserData } from '../../firebase/Functions';
 
 export default function TimesheetAdminView(props) {
-    const [data, setdata] = useState([]);
     const [isLoading, setisLoading] = useState(false);
 
-    const [name, setname] = useState(props.employee.name);
-    const [pay, setpay] = useState(props.employee.pay);
-    const [id, setid] = useState(props.employee.id);
-    const [notes, setNotes] = useState(props.employee.notes);
+    function validateName(val) { if (!val) return "Required" }
+    function validatePay(val) { if (!val) return "Required" }
 
-
-    const testEmployeeList = [
-        {
-            "name": "Uzair Ahmed",
-            "id": 12312312312,
-            "pay": 21,
-            "notes": ""
-        },
-        {
-            "name": "Shiza Ahmed",
-            "id": 12312312312,
-            "pay": 14,
-            "notes": ""
-        }
-    ]
-
-    useEffect(() => {
-        setdata(testEmployeeList)
-        console.log(data)
-    }, []);
-
-    async function handleSubmit() {
+    async function handleSubmit(values) {
         setisLoading(true)
-        // await writeUserData ()
+        await writeUserData(values)
         setisLoading(false)
+        props.onclose()
     }
 
     return (
-        <>
-            <FormControl>
-                <FormLabel>Name</FormLabel>
-                <Input defaultValue={props.employee.name} type='text' />
-            </FormControl>
-            <FormControl>
-                <FormLabel>Pay</FormLabel>
-                <NumberInput defaultValue={props.employee.pay}>
-                    <NumberInputField />
-                    <NumberInputStepper>
-                        <NumberIncrementStepper />
-                        <NumberDecrementStepper />
-                    </NumberInputStepper>
-                </NumberInput>
-            </FormControl>
-            <FormControl>
-                <FormLabel>Employee ID</FormLabel>
-                <Input defaultValue={props.employee.id} type='text' />
-            </FormControl>
-            <FormControl>
-                <FormLabel>Notes</FormLabel>
-                <Input defaultValue={props.employee.notes} type='text' />
-            </FormControl>
-            <Button
-                onClick={() => handleSubmit()}
-                isLoading={isLoading}
-                loadingText='Saving'
-                colorScheme='teal'
-                variant='outline'
-            >
-                Save
-            </Button>
-        </>
+        <Formik
+            initialValues={{
+                name: props.employee.name,
+                pay: props.employee.pay,
+                id: props.employee.id,
+                notes: props.employee.notes
+            }}
+
+            onSubmit={(values) => {
+                handleSubmit(values)
+            }}
+        >
+
+            <Form>
+                <Field name='name' validate={(val) => validateName(val)}>
+                    {({ field, form }) => (
+                        <FormControl>
+                            <FormLabel>Name</FormLabel>
+                            <Input {...field} id="name" defaultValue={props.employee.name} type='text' />
+                        </FormControl>
+                    )}
+                </Field>
+
+                <Field name='pay' validate={(val) => validatePay(val)}>
+                    {({ field, form }) => (
+                        <FormControl>
+                            <FormLabel>Pay</FormLabel>
+                            <Input {...field} id="pay" type='text' defaultValue={props.employee.pay} />
+                        </FormControl>
+                    )}
+                </Field>
+
+                <Field name='id'>
+                    {({ field, form }) => (
+                        <FormControl>
+                            <FormLabel>Employee ID</FormLabel>
+                            <Input disabled={true} {...field} id="id" defaultValue={props.employee.id} type='text' />
+                        </FormControl>
+                    )}
+                </Field>
+
+                <Field name='notes'>
+                    {({ field, form }) => (
+                        <FormControl>
+                            <FormLabel>Notes</FormLabel>
+                            <Input {...field} id="notes" defaultValue={props.employee.notes} type='text' />
+                        </FormControl>
+                    )}
+                </Field>
+
+                <Button
+                    type='submit'
+                    isLoading={isLoading}
+                    loadingText='Saving'
+                    colorScheme='teal'
+                    variant='outline'
+                >
+                    Save
+                </Button>
+            </Form>
+        </Formik>
     )
 }

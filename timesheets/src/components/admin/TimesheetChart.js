@@ -1,21 +1,9 @@
-import {
-  Box, Button, Center, HStack, VStack, Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-  TableContainer,
-} from '@chakra-ui/react'
-
-import {
-  useTable
-} from "react-table";
-
 import React, { useState } from 'react'
-import paddings from '../../styles/styles'
+import {
+  Center,
+  Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableContainer,
+} from '@chakra-ui/react'
+import { useTable } from "react-table";
 
 export default function TimesheetAdminChart(props) {
   const data = React.useMemo(() => ([

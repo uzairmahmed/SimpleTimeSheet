@@ -1,10 +1,9 @@
-import { Box, Button, Center, HStack, VStack } from '@chakra-ui/react'
+import { Button, Center, HStack, VStack } from '@chakra-ui/react'
 import React, { useState } from 'react'
-import paddings from '../../styles/styles'
 
 import TimesheetAdminChart from './TimesheetChart'
 
-export default function TimesheetAdminView(props) {
+export default function TimesheetView(props) {
   return (
     <VStack>
       <Center w='100%' bg='yellow.200'>
