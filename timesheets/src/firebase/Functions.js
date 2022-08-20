@@ -24,3 +24,10 @@ export async function deleteUserData(id) {
     const db = getDatabase();
     remove(ref(db, 'employees/' + id))
 }
+
+export async function writeTimesheetData(data) {
+    const db = getDatabase();
+    data.dates.forEach(date => {
+        set(ref(db, 'timesheets/' + data.id + '/' + date), date);
+    });
+}

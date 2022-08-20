@@ -5,6 +5,7 @@ import {
 import React, { useState } from 'react'
 
 import TimesheetAdminChart from './TimesheetChart'
+import TimesheetCreateForm from './TimesheetCreateForm'
 
 export default function TimesheetView(props) {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,6 +26,7 @@ export default function TimesheetView(props) {
           <ModalHeader>New Timesheet</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
+            <TimesheetCreateForm onclose={() => onClose()}/>
             {/* <EmployeeEditForm onclose={() => onClose()} employee={temployee} /> */}
           </ModalBody>
         </ModalContent>
