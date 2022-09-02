@@ -1,14 +1,42 @@
 import {
   Button, Center, HStack, VStack,
   Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton,
+  Select,
 } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import TimesheetAdminChart from './TimesheetChart'
 import TimesheetCreateForm from './TimesheetCreateForm'
 
+import { getTimesheets, writeCurrentTimesheet, getCurrentTimesheet } from '../../firebase/Functions';
+
 export default function TimesheetView(props) {
   const [isOpen, setIsOpen] = useState(false);
+  const [timesheets, setTimesheets] = useState([]);
+  const [currentTS, setCurrentTS] = useState('')
+  const [selectedTS, setSelectedTS] = useState('')
+
+
+  useEffect(() => {
+    handleTimeSheets()
+  }, []);
+
+  async function handleTimeSheets() {
+    const tempTimesheets = await getTimesheets()
+    const dataobject = Object.keys(tempTimesheets).map((key) => tempTimesheets[key])
+    setTimesheets(dataobject)
+    setCurrentTS(await getCurrentTimesheet())
+    setSelectedTS(currentTS)
+  }
+
+  function handleTimesheetSelect(val) {
+    setSelectedTS(val)
+  }
+
+  async function handleSet() {
+    // console.log(selectedTS)
+    await writeCurrentTimesheet(selectedTS)
+  }
 
   function handleCreate() {
     setIsOpen(true)
@@ -16,7 +44,8 @@ export default function TimesheetView(props) {
 
   function onClose() {
     setIsOpen(false)
-}
+    handleTimeSheets()
+  }
 
   return (
     <>
@@ -26,7 +55,7 @@ export default function TimesheetView(props) {
           <ModalHeader>New Timesheet</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <TimesheetCreateForm onclose={() => onClose()}/>
+            <TimesheetCreateForm onclose={() => onClose()} />
             {/* <EmployeeEditForm onclose={() => onClose()} employee={temployee} /> */}
           </ModalBody>
         </ModalContent>
@@ -44,13 +73,25 @@ export default function TimesheetView(props) {
         </Button>
         <Center w='100%' bg='yellow.200'>
           <HStack>
-            <Center p='25' bg='green'>
-              <Button colorScheme='blue'>Previous Timesheet</Button>
-            </Center>
             <Center p='25' bg='red'>Current Timesheet</Center>
-            <Center p='25' bg='blue'>
-              <Button colorScheme='blue'>Next Timesheet</Button>
-            </Center>
+
+            <Select
+              onChange={(e) => handleTimesheetSelect(e.target.value)}
+              placeholder={currentTS}>
+              {timesheets.map(ts => (
+                <option value={String(ts[0])}>{ts[0]}</option>
+              ))}
+            </Select>
+
+            <Button
+              onClick={() => handleSet()}
+              p={5}
+              type='submit'
+              colorScheme='teal'
+              variant='outline'
+            >
+              Set Timesheet
+            </Button>
           </HStack>
         </Center>
         <Center w='100%'>

@@ -4,8 +4,8 @@ import paddings from '../styles/styles'
 
 export default function TitleBar(props) {
     return (
-       <Button borderRadius="lg" height={paddings.userButton}>
-          {props.name}
+       <Button onClick={() => props.navigatePage(2, props.id)} borderRadius="lg" height={paddings.userButton}>
+          {props.name} {props.id}
        </Button>
     )
 }

@@ -36,7 +36,7 @@ export default function TimesheetAdminView(props) {
 
             const payload = {
                 id: dates[0],
-                dates:dates
+                dates: dates
             }
 
             await writeTimesheetData(payload)
@@ -62,9 +62,6 @@ export default function TimesheetAdminView(props) {
         tempDate.setDate(sDate.getDate() + 13);
 
         seteDate(tempDate)
-
-        console.log(sDate)
-        console.log(tempDate)
 
         if (validateStart(sDate)) {
             setIsStartInvalid(true)

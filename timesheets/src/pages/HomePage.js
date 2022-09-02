@@ -44,7 +44,7 @@ export default function UserPage(props) {
 
             <SimpleGrid px={paddings.userPadX} minChildWidth={paddings.userButton} spacing='40px'>
                 {employees.map(emp => (
-                    <UserCard name={emp.name} />
+                    <UserCard navigatePage={props.navigatePage} id={emp.id} name={emp.name} />
                 ))}
             </SimpleGrid>
 

@@ -27,7 +27,39 @@ export async function deleteUserData(id) {
 
 export async function writeTimesheetData(data) {
     const db = getDatabase();
-    data.dates.forEach(date => {
-        set(ref(db, 'timesheets/' + data.id + '/' + date), date);
+    data.dates.forEach(function (date, index) {
+        set(ref(db, 'timesheets/' + data.id + '/' + index), date);
+    })
+}
+
+export async function getTimesheets(){
+    const dbRef = ref(getDatabase());
+    return get(child(dbRef, `timesheets`)).then((snapshot) => {
+        if (snapshot.exists()) {
+            return (snapshot.val())
+        } else {
+            return []
+        }
+    }).catch((error) => {
+        console.error(error);
+    });
+}
+
+export async function writeCurrentTimesheet(data) {
+    const db = getDatabase();
+    // console.log(data)
+    set(ref(db, 'current_timesheet'), data);
+}
+
+export async function getCurrentTimesheet() {
+    const dbRef = ref(getDatabase());
+    return get(child(dbRef, `current_timesheet`)).then((snapshot) => {
+        if (snapshot.exists()) {
+            return (snapshot.val())
+        } else {
+            return []
+        }
+    }).catch((error) => {
+        console.error(error);
     });
 }

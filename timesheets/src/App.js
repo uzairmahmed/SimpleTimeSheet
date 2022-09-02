@@ -1,7 +1,7 @@
 import './App.css';
 import { ChakraProvider } from '@chakra-ui/react'
 
-import MainPage from './pages/MainPage'
+import PageManager from './pages/PageManager'
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -17,7 +17,7 @@ const analytics = getAnalytics(app);
 export default function App() {
   return (
     <ChakraProvider>
-      <MainPage />
+      <PageManager />
     </ChakraProvider>
   );
 }
