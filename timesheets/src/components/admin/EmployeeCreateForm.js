@@ -26,6 +26,8 @@ export default function TimesheetAdminView(props) {
 
     return (
         <Formik
+            enableReinitialize={true}
+
             initialValues={{
                 name: '',
                 pay: '',

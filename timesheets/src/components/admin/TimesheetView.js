@@ -34,7 +34,6 @@ export default function TimesheetView(props) {
   }
 
   async function handleSet() {
-    // console.log(selectedTS)
     await writeCurrentTimesheet(selectedTS)
   }
 
@@ -77,9 +76,9 @@ export default function TimesheetView(props) {
 
             <Select
               onChange={(e) => handleTimesheetSelect(e.target.value)}
-              placeholder={currentTS}>
+              placeholder={"Select a Timesheet to View"}>
               {timesheets.map(ts => (
-                <option value={String(ts[0])}>{ts[0]}</option>
+                <option value={ts[0].date}>{ts[0].date}</option>
               ))}
             </Select>
 
