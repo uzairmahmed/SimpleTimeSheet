@@ -82,8 +82,8 @@ export default function TimesheetAdminView(props) {
                         type='submit'
                         isLoading={isLoading}
                         loadingText='Creating User'
-                        colorScheme='teal'
-                        variant='outline'
+                        colorScheme='blue'
+                        variant='solid'
                     >
                         Create Employee
                     </Button>

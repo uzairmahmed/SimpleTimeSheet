@@ -3,6 +3,7 @@ import {
     Box, Center, HStack, VStack, Text, IconButton,
     Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon,
     Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, Button,
+    Stat, StatLabel, StatNumber, StatHelpText, StatArrow, StatGroup,
 } from '@chakra-ui/react'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
 
@@ -16,7 +17,6 @@ export default function EmployeeView(props) {
     const [data, setdata] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
     const [isOpen2, setIsOpen2] = useState(false);
-    const [isOpen3, setIsOpen3] = useState(false);
 
     const [temployee, settemployee] = useState({
         "name": "Loading...",
@@ -27,7 +27,7 @@ export default function EmployeeView(props) {
 
     useEffect(() => {
         handleEmployees()
-    }, []);
+    }, [props.refresh]);
 
     async function handleEmployees() {
         const tempEmployees = await getEmployeeList()
@@ -39,20 +39,15 @@ export default function EmployeeView(props) {
         settemployee(employee)
         setIsOpen(true)
     }
-    
+
     function handleDelete(employee) {
         settemployee(employee)
         setIsOpen2(true)
-    }
-    
-    function handleCreate() {
-        setIsOpen3(true)
     }
 
     function onClose() {
         setIsOpen(false)
         setIsOpen2(false)
-        setIsOpen3(false)
         handleEmployees()
     }
 
@@ -80,28 +75,8 @@ export default function EmployeeView(props) {
                 </ModalContent>
             </Modal>
 
-            <Modal isOpen={isOpen3} onClose={onClose}>
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>Edit Employee Details</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                        <EmployeeCreateForm onclose={() => onClose()} id={data.length + 1}/>
-                    </ModalBody>
-                </ModalContent>
-            </Modal>
-
             <VStack>
                 <Center w='100%'>
-                    <Button
-                        onClick={() => handleCreate()}
-                        p={5}
-                        type='submit'
-                        colorScheme='teal'
-                        variant='outline'
-                    >
-                        New
-                    </Button>
                     <Accordion w='100%' allowToggle>
                         {data.map((employee) => (
                             <AccordionItem>
@@ -114,34 +89,30 @@ export default function EmployeeView(props) {
                                     </AccordionButton>
                                 </h2>
                                 <AccordionPanel pb={4}>
-                                    <HStack w="100%" bg='black' justify={'space-between'}>
-                                        <VStack p='25' bg='green' verticalAlign={'top'} align={'left'}>
-                                            <Text fontSize='sm'>PAY</Text>
-                                            <Text fontSize='sm'>${employee.pay}/hr</Text>
-                                            <Text fontSize='sm'>EMPLOYEE ID</Text>
-                                            <Text fontSize='sm'>#{employee.id}</Text>
-                                        </VStack>
-                                        <VStack p='25' w='100%' bg='green' align={'center'}>
-                                            <Text fontSize='sm'>Notes</Text>
-                                            <Text fontSize='sm'>{employee.notes}</Text>
-                                        </VStack>
-                                        <Center p='25' bg='blue'>
-                                            <IconButton
-                                                onClick={() => handleEdit(employee)}
+                                    <HStack w="100%" justify={'space-between'}>
+                                        <Stat>
+                                            <StatLabel>Pay</StatLabel>
+                                            <StatNumber>${employee.pay}/hr</StatNumber>
+                                        </Stat>
+                                        <Stat>
+                                            <StatLabel>Employee ID</StatLabel>
+                                            <StatNumber>#{employee.id}</StatNumber>
+                                        </Stat>
+                                        <Stat>
+                                            <StatLabel>Employee Notes</StatLabel>
+                                            <StatHelpText>{employee.notes}</StatHelpText>
+                                        </Stat>
+                                        <Center>
+                                            <Button onClick={() => handleEdit(employee)}
+                                                leftIcon={<EditIcon />}
                                                 variant='outline'
-                                                colorScheme='teal'
-                                                aria-label='Edit Employee'
-                                                fontSize='20px'
-                                                icon={<EditIcon />}
-                                            />
-                                            <IconButton
-                                                onClick={() => handleDelete(employee)}
+                                                colorScheme='blue'>Edit Employee</Button>
+
+                                            <Button onClick={() => handleDelete(employee)}
+                                                ml='5'
+                                                leftIcon={<EditIcon />}
                                                 variant='outline'
-                                                colorScheme='teal'
-                                                aria-label='Delete Employee'
-                                                fontSize='20px'
-                                                icon={<DeleteIcon />}
-                                            />
+                                                colorScheme='blue'>Delete Employee</Button>
                                         </Center>
                                     </HStack>
                                 </AccordionPanel>

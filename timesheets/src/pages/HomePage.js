@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react'
 
 import { Center, SimpleGrid, HStack, Flex, Spacer, VStack, Text, Button, Image } from '@chakra-ui/react'
+import { SettingsIcon } from '@chakra-ui/icons'
 
 import UserCard from '../components/UserCard';
 
 import paddings from '../styles/styles';
-import {getEmployeeList} from '../firebase/Functions';
+import { getEmployeeList, getCurrentTimesheet } from '../firebase/Functions';
 
 export default function UserPage(props) {
     const [employees, setEmployees] = useState([]);
+    const [tsTimes, settsTimes] = useState([]);
 
     async function handleEmployees() {
         const tempEmployees = await getEmployeeList()
@@ -16,34 +18,46 @@ export default function UserPage(props) {
         setEmployees(dataobject)
     }
 
+    async function getCurrentTimesheetValues() {
+        let ts = await getCurrentTimesheet()
+        let tsS = new Date(ts)
+        let tsE = new Date(tsS.getTime())
+
+        var options = { year: 'numeric', month: 'long', day: 'numeric' };
+
+        tsE.setDate(tsS.getDate() + 13)
+
+        settsTimes([tsS.toUTCString("en-US", options).slice(5, 16), tsE.toUTCString("en-US", options).slice(5, 16)])
+    }
+
     useEffect(() => {
         handleEmployees()
+        getCurrentTimesheetValues()
     }, []);
 
     return (
         <Flex direction={'column'} h='100vh'>
-            <HStack w="100%" justify={'space-between'}>
-                <Image src='https://i.gyazo.com/d74f92946aa2ebf071b955c824a1b64c.png' m={25} w='250px' alt='Logo' />
-                <Center p='25'></Center>
-                <Center p='25'>
-                    <Button onClick={() => props.navigatePage(1)} colorScheme='blue'>Admin</Button>
+            <HStack w="100%" display={'flex'}>
+                <Center flex={'1'} display={'flex'} justifyContent={'flex-start'} mr={'auto'} p='25'>
+                    <Image src='https://i.gyazo.com/d74f92946aa2ebf071b955c824a1b64c.png' w='200px' alt='Logo' />
+                </Center>
+                <Center justifyContent={'center'} display={'flex'} flex={'1'}>
+                    <Text p='25' fontSize='xl'>{tsTimes[0]} to {tsTimes[1]}</Text>
+                </Center>
+                <Center display={'flex'} justifyContent={'flex-end'} flex={'1'} ml={'auto'} p='25'>
+                    <Button
+                        rightIcon={<SettingsIcon />}
+                        variant='outline'
+                        colorScheme='blue'
+                        onClick={() => props.navigatePage(1)}>
+                        Admin
+                    </Button>
                 </Center>
             </HStack>
 
             <Spacer />
 
-            <VStack>
-                <Text>
-                    Select User
-                </Text>
-
-                <Text>
-                    Current Time Period:
-                </Text>
-            </VStack>
-
-            <Spacer />
-
+            {/* <Center py="25px"><Text>Select User to Log Hours</Text></Center> */}
             <SimpleGrid px={paddings.userPadX} minChildWidth={paddings.userButton} spacing='40px'>
                 {employees.map(emp => (
                     <UserCard navigatePage={props.navigatePage} id={emp.id} name={emp.name} />
@@ -52,12 +66,10 @@ export default function UserPage(props) {
 
             <Spacer />
 
-            <HStack w="100%" bg='black' justify={'space-between'}>
-                <Center p='25' bg='green'></Center>
-                <Center p='25' bg='red'></Center>
-                <Center p='25' bg='blue'>
-                    <Button onClick={() => props.navigatePage(1)} colorScheme='blue'>Admin</Button>
-                </Center>
+            <HStack w="100%" justify={'space-between'}>
+                <Center p='1' ></Center>
+                <Center p='1' as='sup' ><Text fontSize='xs'>Uzair's Super Cool Timesheet Program</Text></Center>
+                <Center p='1' ></Center>
             </HStack>
         </Flex>
     )

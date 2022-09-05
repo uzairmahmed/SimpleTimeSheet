@@ -75,7 +75,7 @@ export default function TimesheetAdminChart(props) {
   return (
     <Center w='100%'>
       <TableContainer>
-        <Table variant='simple'>
+        <Table variant='striped' colorScheme='blue'>
           <Thead>
             {headerGroups.map((group) => (
               <Tr {...group.getHeaderGroupProps()}>

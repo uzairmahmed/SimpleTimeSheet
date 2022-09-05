@@ -32,10 +32,10 @@ export default function TimesheetAdminView(props) {
                 onClick={() => handleSubmit(props.employee.id)}
                 p={5}
                 type='submit'
-                colorScheme='teal'
                 isLoading={isLoading}
                 loadingText='Deleting'
-                variant='outline'
+                colorScheme='blue'
+                variant='solid'
             >
                 Delete Employee 
             </Button>

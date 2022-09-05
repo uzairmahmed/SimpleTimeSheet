@@ -82,8 +82,8 @@ export default function TimesheetAdminView(props) {
                         type='submit'
                         isLoading={isLoading}
                         loadingText='Saving'
-                        colorScheme='teal'
-                        variant='outline'
+                        colorScheme='blue'
+                        variant='solid'
                     >
                         Save Employee
                     </Button>

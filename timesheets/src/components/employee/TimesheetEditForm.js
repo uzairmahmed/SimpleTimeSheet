@@ -115,8 +115,8 @@ export default function TimesheetEditForm(props) {
                         type='submit'
                         isLoading={isLoading}
                         loadingText='Saving'
-                        colorScheme='teal'
-                        variant='outline'
+                        colorScheme='blue'
+                        variant='solid'
                     >
                         Submit Hours
                     </Button>
