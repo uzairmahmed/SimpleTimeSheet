@@ -63,6 +63,9 @@ export default function TimesheetEditForm(props) {
             if (!values.etime){
                 values.etime = ""
             }
+            if (!values.notes){
+                values.notes = ""
+            }
 
 
             let etimeDate = new Date()
@@ -131,7 +134,8 @@ export default function TimesheetEditForm(props) {
             initialValues={{
                 stime: data.stime,
                 etime: data.etime,
-                notes: data.notes
+                notes: data.notes,
+                name: data.name
             }}
 
             onSubmit={(values) => {

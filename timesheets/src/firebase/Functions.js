@@ -149,7 +149,6 @@ export async function writeHoursToEmployeeTimesheet(s_date, idx, eID, payload){
         // return get(child(dbRef, 'timesheets/'+s_date+"/"+idx+"/total").then(async (snapshot) => {
         if (snapshot.exists()) {
             let tempVal = snapshot.val() + payload.total
-            console.log(snapshot.val())
             await set(ref(db, 'timesheets/'+s_date+"/"+idx+"/total"), tempVal);
 
         } else {
