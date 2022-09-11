@@ -47,6 +47,7 @@ export default function TimesheetView(props) {
   async function getTimeSheetValues(val) {
     if (val) {
       let tData = await getTimesheetData(val)
+      console.log(tData)
       return processTimesheet(tData)
     }
   }
@@ -127,7 +128,7 @@ export default function TimesheetView(props) {
       temp["Key0"] = dateText
       temp["Key1"] = dayText
 
-
+      console.log(val[0])
       Object.keys(val[0]).forEach(function (emp, index) {
         if (val[0][emp].name) {
           let IN = val[0][emp].name + "_In"
@@ -138,6 +139,8 @@ export default function TimesheetView(props) {
           let stime
           let etime
           let notes
+          let breakT
+          let totalT
 
           if (date[emp].stime) {
             stime = date[emp].stime
@@ -157,21 +160,32 @@ export default function TimesheetView(props) {
             notes = "-"
           }
 
+          if (date[emp].break) {
+            breakT = date[emp].break
+          } else {
+            breakT = "-"
+          }
+
+          if (date[emp].total) {
+            totalT = date[emp].total
+          } else {
+            totalT = "-"
+          }
+
           let temp2 = {}
 
           temp2[IN] = stime
           temp2[OUT] = etime
-          temp2[BREAK] = "99"
-          temp2[TOTAL] = "99"
-
+          temp2[BREAK] = breakT
+          temp2[TOTAL] = totalT
+          console.log(temp2)
           temp = {
             ...temp,
             ...temp2
           }
         }
       })
-
-
+      // console.log(temp)
       rows.push(temp)
     });
 

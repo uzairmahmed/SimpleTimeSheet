@@ -29,7 +29,8 @@ export async function writeTimesheetData(data) {
     const db = getDatabase();
     data.dates.forEach(function (date, index) {
         set(ref(db, 'timesheets/' + data.id + '/' + index), {
-            date:date
+            date:date,
+            total:0
         });
     })
 }
@@ -141,5 +142,21 @@ export async function getEmployeeTimesheet(s_date, idx, eID){
 
 export async function writeHoursToEmployeeTimesheet(s_date, idx, eID, payload){
     const db = getDatabase();
+    const dbRef = ref(db);
+
     await set(ref(db, 'timesheets/'+s_date+"/"+idx+"/"+eID), payload);
+    return get(child(dbRef, 'timesheets/'+s_date+"/"+idx+"/total")).then(async (snapshot) => {
+        // return get(child(dbRef, 'timesheets/'+s_date+"/"+idx+"/total").then(async (snapshot) => {
+        if (snapshot.exists()) {
+            let tempVal = snapshot.val() + payload.total
+            console.log(snapshot.val())
+            await set(ref(db, 'timesheets/'+s_date+"/"+idx+"/total"), tempVal);
+
+        } else {
+            return []
+        }
+    }).catch((error) => {
+        console.error(error);
+    })
+    
 }

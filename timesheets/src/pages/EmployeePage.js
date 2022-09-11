@@ -39,7 +39,6 @@ export default function EmployeePage(props) {
 
     function handleLogHours(timesheet, idx) {
         timesheet.idx = idx
-        // console.log(timesheet)
         settempTimesheet(timesheet)
         setIsOpen(true)
     }

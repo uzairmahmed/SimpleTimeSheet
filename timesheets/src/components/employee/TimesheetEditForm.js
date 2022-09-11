@@ -33,12 +33,29 @@ export default function TimesheetEditForm(props) {
         setData(data)
     }
 
+    function roundTimeQuarterHour(time) {
+        var timeToReturn =time
+    
+        timeToReturn.setMilliseconds(Math.round(timeToReturn.getMilliseconds() / 1000) * 1000);
+        timeToReturn.setSeconds(Math.round(timeToReturn.getSeconds() / 60) * 60);
+        timeToReturn.setMinutes(Math.round(timeToReturn.getMinutes() / 15) * 15);
+        return timeToReturn;
+    }
+
+    function getPrettyTime(date) {
+        let d = new Date(date)
+        var options = { year: 'numeric', month: 'long', day: 'numeric' };
+
+        // return d.toLocaleDateString("en-US", options)
+        return d.toString("en-US", options).slice(16,21)
+    }
+
     async function handleSubmit(values) {
         if (validateETime(values.etime)) {
             setisEndInvalid(true)
         } else {
             setisEndInvalid(false)
-            setisLoading(true)
+            // setisLoading(true)
 
             if (!values.stime){
                 values.stime = ""
@@ -47,10 +64,55 @@ export default function TimesheetEditForm(props) {
                 values.etime = ""
             }
 
+
+            let etimeDate = new Date()
+            let stimeDate = new Date()
+
+            
+            let sh = values.stime.split(':')[0]
+            let sm = values.stime.split(':')[1]
+            
+            let eh = values.etime.split(':')[0]
+            let em = values.etime.split(':')[1]
+            
+            stimeDate.setHours(sh, sm)
+            etimeDate.setHours(eh, em)
+
+            stimeDate=roundTimeQuarterHour(stimeDate)
+            etimeDate=roundTimeQuarterHour(etimeDate)
+
+            values.stime = getPrettyTime(stimeDate)
+            values.etime = getPrettyTime(etimeDate)
+
+            let totalT = 0
+            let breakT = 0
+            let tempBreakT = 0
+
+            
+            totalT = Math.floor(((etimeDate-stimeDate)/1000)/60)/60
+            
+            if ((5.25<totalT)&&(totalT<5.5)){
+                tempBreakT = totalT - 5.25
+                
+            } else if (totalT >= 5.5) {
+                tempBreakT = 0.5
+            }
+            
+            breakT = Math.round(tempBreakT * 60)
+            
+            totalT += tempBreakT
+
+            totalT = totalT.toFixed(2)
+
+            values.total = totalT
+            values.break = breakT
+            
             const combined = {
                 ...initialData,
-                ...values
+                ...values,
             }
+            console.log(combined)
+
             await writeHoursToEmployeeTimesheet(
                 props.cTS,
                 props.timesheet.idx,
