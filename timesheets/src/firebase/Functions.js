@@ -145,17 +145,33 @@ export async function writeHoursToEmployeeTimesheet(s_date, idx, eID, payload){
     const dbRef = ref(db);
 
     await set(ref(db, 'timesheets/'+s_date+"/"+idx+"/"+eID), payload);
-    return get(child(dbRef, 'timesheets/'+s_date+"/"+idx+"/total")).then(async (snapshot) => {
-        // return get(child(dbRef, 'timesheets/'+s_date+"/"+idx+"/total").then(async (snapshot) => {
-        if (snapshot.exists()) {
-            let tempVal = snapshot.val() + payload.total
-            await set(ref(db, 'timesheets/'+s_date+"/"+idx+"/total"), tempVal);
 
-        } else {
-            return []
-        }
-    }).catch((error) => {
-        console.error(error);
-    })
+    updateTotalHours(s_date)
     
 }
+
+export async function updateTotalHours(s_date){
+    const db = getDatabase();
+    const dbRef = ref(db);
+
+    return get(child(dbRef, 'timesheets/'+s_date)).then(async (snapshot) => {
+        if (snapshot.exists()) {
+            // console.log(snapshot.val())
+            snapshot.val().forEach(async function (day, idx){
+                // console.log(day.total)
+                let tt = 0
+                Object.keys(day).forEach(function (emp){
+                    if (typeof day[emp] === 'object'){
+                        if (day[emp].total){
+                            tt += parseFloat(day[emp].total)
+                        }
+                    }
+                })
+                await set(ref(db, 'timesheets/'+s_date+"/"+idx+"/total"), tt);
+            })
+        }
+    }).catch((error) => {
+        console.error(error)
+
+    })
+    }

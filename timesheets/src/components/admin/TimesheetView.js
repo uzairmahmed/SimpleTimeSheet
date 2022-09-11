@@ -5,10 +5,12 @@ import {
 } from '@chakra-ui/react'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import React, { useState, useEffect } from 'react'
+import { CSVLink, CSVDownload } from "react-csv";
 
 import TimesheetAdminChart from './TimesheetChart'
 
 import { getTimesheetData, getTimesheets, writeCurrentTimesheet, getCurrentTimesheet } from '../../firebase/Functions';
+import { exportPayrollSheet, exportTimeSheet } from '../../firebase/ExcelFunctions';
 
 export default function TimesheetView(props) {
   const [timesheets, setTimesheets] = useState([]);
@@ -20,6 +22,8 @@ export default function TimesheetView(props) {
     rows: [],
     columns: []
   })
+
+  const [selectedTSDataRAW, setSelectedTSDataRAW] = useState({})
 
   useEffect(() => {
     handleTimeSheets()
@@ -47,6 +51,7 @@ export default function TimesheetView(props) {
   async function getTimeSheetValues(val) {
     if (val) {
       let tData = await getTimesheetData(val)
+      setSelectedTSDataRAW(tData)
       // console.log(tData)
       return processTimesheet(tData)
     }
@@ -198,6 +203,100 @@ export default function TimesheetView(props) {
     return selectedTSData
   }
 
+  function makeTimeSheetFile() {
+    let header1 = []
+    let header2 = []
+    let empRows = []
+    let footer = ["", ""]
+
+    let sDate = selectedTSDataRAW[0].date
+    let eDate = selectedTSDataRAW[selectedTSDataRAW.length - 1].date
+
+    selectedTSData.columns.forEach(function (col) {
+      // console.log(selectedTSData.columns)
+      if (col.Footer != ''){
+        header1.push(col.Header, "", "", "")
+        footer.push("", "","", col.Footer)
+      } else {
+        footer.push(col.Footer)
+        header1.push(col.Header)
+      }
+      col.columns.forEach(function (col2) {
+        header2.push(col2.Header)
+      })
+    })
+
+    selectedTSData.rows.forEach(function (row) {
+      let tRow = Object.values(row)
+      empRows.push(tRow)
+    })
+
+    let finalArr = []
+    finalArr = [header1].concat([header2], empRows, [footer])
+
+    let data = {
+      sDate: sDate,
+      eDate: eDate,
+      body: finalArr
+    }
+
+    exportTimeSheet(data)
+  }
+
+  function makePayrollFile() {
+    let headerline = ["Name", "Hours Worked", "Hourly Pay", "Remarks"]
+    let otherlines = {}
+    let finalArr = []
+
+    let sDate = selectedTSDataRAW[0].date
+    let eDate = selectedTSDataRAW[selectedTSDataRAW.length - 1].date
+
+    selectedTSDataRAW.forEach(async function (day, idx) {
+      Object.keys(day).forEach(function (emp) {
+        if (typeof day[emp] === 'object') {
+          let tempLoyee = day[emp]
+          let eName = ""
+          let eTotal = 0
+          let ePay = 0
+          let eNotes = "-"
+
+          if (tempLoyee.total) eTotal = parseFloat(tempLoyee.total)
+          if (otherlines[tempLoyee.id]) {
+            otherlines[tempLoyee.id].total = otherlines[tempLoyee.id].total + eTotal
+          } else {
+            if (tempLoyee.name) eName = tempLoyee.name
+            if (tempLoyee.notes) eNotes = tempLoyee.notes
+            if (tempLoyee.pay) ePay = tempLoyee.pay
+            otherlines[tempLoyee.id] = {
+              name: eName,
+              total: eTotal,
+              pay: ePay,
+              notes: eNotes
+            }
+          }
+
+        }
+      })
+    })
+
+    finalArr.push(headerline)
+    Object.keys(otherlines).forEach(function (emp) {
+      let tArr = []
+      tArr.push(otherlines[emp].name)
+      tArr.push(otherlines[emp].total)
+      tArr.push(otherlines[emp].pay)
+      tArr.push(otherlines[emp].notes)
+      finalArr.push(tArr)
+    })
+
+    let data = {
+      sDate: sDate,
+      eDate: eDate,
+      body: finalArr
+    }
+
+    exportPayrollSheet(data)
+  }
 
   return (
     <VStack>
@@ -224,12 +323,12 @@ export default function TimesheetView(props) {
         </Button>
 
         <Menu>
-          <MenuButton as={Button} p={5} pl={10} pr={10} rightIcon={<ChevronDownIcon ml="10"/>}>
+          <MenuButton as={Button} p={5} pl={10} pr={10} rightIcon={<ChevronDownIcon ml="10" />}>
             Export
           </MenuButton>
           <MenuList>
-            <MenuItem>Export Timesheet</MenuItem>
-            <MenuItem>Export Payroll Sheet</MenuItem>
+            <MenuItem onClick={() => makeTimeSheetFile()}>Export Timesheet</MenuItem>
+            <MenuItem onClick={() => makePayrollFile()}>Export Payroll Sheet</MenuItem>
             <MenuItem>Export Email</MenuItem>
           </MenuList>
         </Menu>

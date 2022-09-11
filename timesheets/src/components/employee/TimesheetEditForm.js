@@ -135,7 +135,9 @@ export default function TimesheetEditForm(props) {
                 stime: data.stime,
                 etime: data.etime,
                 notes: data.notes,
-                name: data.name
+                name: data.name,
+                pay: data.pay,
+                id: data.id
             }}
 
             onSubmit={(values) => {
