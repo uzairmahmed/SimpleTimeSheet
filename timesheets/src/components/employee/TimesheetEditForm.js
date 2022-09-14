@@ -9,6 +9,7 @@ import {
     Center,
     FormHelperText,
     FormErrorMessage,
+    useToast
 } from '@chakra-ui/react'
 
 import { getEmployeeTimesheet, writeHoursToEmployeeTimesheet } from '../../functions/Functions';
@@ -19,6 +20,7 @@ export default function TimesheetEditForm(props) {
     const [initialData, setInitialData] = useState({})
     const [isEndInvalid, setisEndInvalid] = useState(false);
     const formRef = useRef();
+    const toast = useToast()
 
     function validateETime(val) { 
         if (formRef.current.values.stime && (!(formRef.current.values.stime < val))) return "End Time must be later than Start Time!" }
@@ -121,7 +123,24 @@ export default function TimesheetEditForm(props) {
                 props.timesheet.idx,
                 props.eID,
                 combined
-            )
+            ).then((val)=>{
+                if (val){
+                    toast({
+                        title: 'Logged Hours to Timesheet',
+                        status: 'success',
+                        duration: 2500,
+                        isClosable: true,
+                      })
+                } else {
+                    toast({
+                        title: 'Error',
+                        description: val,
+                        status: 'error',
+                        duration: 6500,
+                        isClosable: true,
+                      })
+                }
+            })
             setisLoading(false)
             props.onclose()
         }

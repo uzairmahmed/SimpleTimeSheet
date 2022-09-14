@@ -3,16 +3,37 @@ import React, { useState } from 'react'
 import {
     Button,
     Center,
+    useToast
+
 } from '@chakra-ui/react'
 
 import { deleteUserData } from '../../functions/Functions';
 
 export default function TimesheetAdminView(props) {
     const [isLoading, setisLoading] = useState(false);
+    const toast = useToast()
 
     async function handleSubmit(id) {
         setisLoading(true)
-        await deleteUserData(id)
+        await deleteUserData(id).then((val)=>{
+            if (val){
+                toast({
+                    title: 'Deleted Employee',
+                    status: 'success',
+                    duration: 2500,
+                    isClosable: true,
+                  })
+            } else {
+                console.log(val)
+                toast({
+                    title: 'Error',
+                    description: val,
+                    status: 'error',
+                    duration: 6500,
+                    isClosable: true,
+                  })
+            }
+        })
         setisLoading(false)
         props.onclose()
     }

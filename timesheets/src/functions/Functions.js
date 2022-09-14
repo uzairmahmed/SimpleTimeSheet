@@ -12,26 +12,39 @@ export async function getEmployeeList() {
         }
     }).catch((error) => {
         console.error(error);
+        return error.message
     });
 }
 
 export async function writeUserData(data) {
     const db = getDatabase();
-    set(ref(db, 'employees/' + data.id), data);
+    return set(ref(db, 'employees/' + data.id), data).then(() => {
+        return true
+    }).catch(error => {
+        return error.message
+    })
 }
 
 export async function deleteUserData(id) {
     const db = getDatabase();
-    remove(ref(db, 'employees/' + id))
+    return remove(ref(db, 'employees/' + id)).then(() => {
+        return true
+    }).catch(error => {
+        return error.message
+    })
 }
 
 export async function writeTimesheetData(data) {
     const db = getDatabase();
-    data.dates.forEach(function (date, index) {
+    return data.dates.forEach(function (date, index) {
         set(ref(db, 'timesheets/' + data.id + '/' + index), {
             date:date,
             total:0
         });
+    }).then(() => {
+        return true
+    }).catch(error => {
+        return error.message
     })
 }
 
@@ -45,13 +58,18 @@ export async function getTimesheets(){
         }
     }).catch((error) => {
         console.error(error);
+        return error.message
     });
 }
 
 export async function writeCurrentTimesheet(data) {
     const db = getDatabase();
     // console.log(data)
-    set(ref(db, 'current_timesheet'), data);
+    return set(ref(db, 'current_timesheet'), data).then(() => {
+        return true
+    }).catch(error => {
+        return error.message
+    });
 }
 
 export async function getCurrentTimesheet() {
@@ -64,6 +82,7 @@ export async function getCurrentTimesheet() {
         }
     }).catch((error) => {
         console.error(error);
+        return error.message
     });
 }
 
@@ -77,6 +96,7 @@ export async function getTimesheetData(s_date){
         }
     }).catch((error) => {
         console.error(error);
+        return error.message
     });
 }
 
@@ -90,6 +110,7 @@ export async function getEmployeeData(eID){
         }
     }).catch((error) => {
         console.error(error);
+        return error.message
     });
 }
 
@@ -109,6 +130,7 @@ export async function addEmployeeToTimesheetifNotExists(eID){
         }
     }).catch((error) => {
         console.error(error);
+        return error.message
     });  
     return cTS
 }
@@ -123,8 +145,11 @@ export async function mapEmployeeToTimesheet(s_date, eID, eName, eNotes, ePay){
             name: eName,
             notes: eNotes,
             pay: ePay
-        });
+        }).catch(error => {
+            return error.message
+        })
     }
+    return true
 }
 
 export async function getEmployeeTimesheet(s_date, idx, eID){
@@ -137,6 +162,7 @@ export async function getEmployeeTimesheet(s_date, idx, eID){
         }
     }).catch((error) => {
         console.error(error);
+        return error.message
     });
 }
 
@@ -144,10 +170,13 @@ export async function writeHoursToEmployeeTimesheet(s_date, idx, eID, payload){
     const db = getDatabase();
     const dbRef = ref(db);
 
-    await set(ref(db, 'timesheets/'+s_date+"/"+idx+"/"+eID), payload);
-
-    updateTotalHours(s_date)
-    
+    await set(ref(db, 'timesheets/'+s_date+"/"+idx+"/"+eID), payload).catch(error => {
+        return error.message
+    })
+    updateTotalHours(s_date).catch(error => {
+        return error.message
+    })
+    return true
 }
 
 export async function updateTotalHours(s_date){
@@ -170,8 +199,9 @@ export async function updateTotalHours(s_date){
                 await set(ref(db, 'timesheets/'+s_date+"/"+idx+"/total"), tt);
             })
         }
+        return true
     }).catch((error) => {
         console.error(error)
-
+        return error.message
     })
     }

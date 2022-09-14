@@ -7,19 +7,39 @@ import {
     Input,
     Button,
     Center,
+    useToast
 } from '@chakra-ui/react'
 
 import { writeUserData } from '../../functions/Functions';
 
 export default function TimesheetAdminView(props) {
     const [isLoading, setisLoading] = useState(false);
+    const toast = useToast()
 
     function validateName(val) { if (!val) return "Required" }
     function validatePay(val) { if (!val) return "Required" }
 
     async function handleSubmit(values) {
         setisLoading(true)
-        await writeUserData(values)
+        await writeUserData(values).then((val)=>{
+            if (val){
+                toast({
+                    title: 'Created Employee',
+                    status: 'success',
+                    duration: 2500,
+                    isClosable: true,
+                  })
+            } else {
+                toast({
+                    title: 'Error',
+                    description: val,
+                    status: 'error',
+                    duration: 6500,
+                    isClosable: true,
+                  })
+            }
+        })
+
         setisLoading(false)
         props.onclose()
     }

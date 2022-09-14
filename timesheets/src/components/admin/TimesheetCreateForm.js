@@ -9,6 +9,7 @@ import {
     Center,
     FormHelperText,
     FormErrorMessage,
+    useToast
 } from '@chakra-ui/react'
 
 import { SingleDatepicker } from 'chakra-dayzed-datepicker';
@@ -20,6 +21,8 @@ export default function TimesheetAdminView(props) {
     const [isStartInvalid, setIsStartInvalid] = useState(false);
     const [sDate, setsDate] = useState(new Date());
     const [eDate, seteDate] = useState(new Date());
+    const toast = useToast()
+
 
     function validateStart(val) {
         if (!val) return "Required"
@@ -39,7 +42,24 @@ export default function TimesheetAdminView(props) {
                 dates: dates
             }
 
-            await writeTimesheetData(payload)
+            await writeTimesheetData(payload).then((val)=>{
+                if (val){
+                    toast({
+                        title: 'Created Timesheet',
+                        status: 'success',
+                        duration: 2500,
+                        isClosable: true,
+                      })
+                } else {
+                    toast({
+                        title: 'Error',
+                        description: val,
+                        status: 'error',
+                        duration: 6500,
+                        isClosable: true,
+                      })
+                }
+            })
             setisLoading(false)
             props.onclose()
         }

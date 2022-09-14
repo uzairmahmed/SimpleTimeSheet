@@ -1,7 +1,7 @@
 import {
   Button, Center, HStack, VStack,
   Menu, MenuButton, MenuList, MenuItem, MenuItemOption, MenuGroup, MenuOptionGroup, MenuDivider,
-  Select,
+  Select,useToast
 } from '@chakra-ui/react'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import React, { useState, useEffect } from 'react'
@@ -24,6 +24,7 @@ export default function TimesheetView(props) {
   })
 
   const [selectedTSDataRAW, setSelectedTSDataRAW] = useState({})
+  const toast = useToast()
 
   useEffect(() => {
     handleTimeSheets()
@@ -45,7 +46,24 @@ export default function TimesheetView(props) {
   }
 
   async function handleSet() {
-    await writeCurrentTimesheet(selectedTS)
+    await writeCurrentTimesheet(selectedTS).then((val)=>{
+      if (val){
+          toast({
+              title: 'Activated Timesheet',
+              status: 'success',
+              duration: 2500,
+              isClosable: true,
+            })
+      } else {
+          toast({
+              title: 'Error',
+              description: val,
+              status: 'error',
+              duration: 6500,
+              isClosable: true,
+            })
+      }
+  })
   }
 
   async function getTimeSheetValues(val) {
