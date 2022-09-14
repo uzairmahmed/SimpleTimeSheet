@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
-import { Center, SimpleGrid, HStack, Flex, Spacer, VStack, Text, Button, Image } from '@chakra-ui/react'
+import { Center, SimpleGrid, HStack, Flex, Spacer, VStack, Text, Button, Image, Input, InputGroup, InputRightElement,
+    AlertDialog,AlertDialogBody,AlertDialogFooter,AlertDialogHeader,AlertDialogContent,AlertDialogOverlay,useDisclosure, 
+    useToast,} from '@chakra-ui/react'
 import { SettingsIcon } from '@chakra-ui/icons'
 
 import UserCard from '../components/UserCard';
@@ -11,6 +13,14 @@ import { getEmployeeList, getCurrentTimesheet } from '../firebase/Functions';
 export default function UserPage(props) {
     const [employees, setEmployees] = useState([]);
     const [tsTimes, settsTimes] = useState([]);
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const cancelRef = React.useRef()
+    const [show, setShow] = React.useState(false)
+    const handleClick = () => setShow(!show)
+    const [pValue, setPValue] = React.useState('')
+    const handleChange = (event) => setPValue(event.target.value)
+    const toast = useToast()
+
 
     async function handleEmployees() {
         const tempEmployees = await getEmployeeList()
@@ -30,6 +40,23 @@ export default function UserPage(props) {
         settsTimes([tsS.toUTCString("en-US", options).slice(5, 16), tsE.toUTCString("en-US", options).slice(5, 16)])
     }
 
+    function handlePassword(){
+        if (pValue == 'Uzair786'){
+            console.log('allowed')
+            props.navigatePage(1)
+        } else {
+            console.log('nope')
+            toast({
+                title: 'Incorrect Password',
+                description: "Please Try Again.",
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+              })
+      
+        }
+    }
+
     useEffect(() => {
         handleEmployees()
         getCurrentTimesheetValues()
@@ -37,6 +64,45 @@ export default function UserPage(props) {
 
     return (
         <Flex direction={'column'} h='100vh'>
+            <AlertDialog
+                isOpen={isOpen}
+                leastDestructiveRef={cancelRef}
+                onClose={onClose}
+            >
+                    <AlertDialogOverlay>
+                    <AlertDialogContent>
+                        <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                        Login to Admin
+                        </AlertDialogHeader>
+   
+                        <AlertDialogBody>
+                        <InputGroup size='md'>
+                            <Input
+                                pr='4.5rem'
+                                type={show ? 'text' : 'password'}
+                                placeholder='Enter password'
+                                onChange={handleChange}
+                            />
+                            <InputRightElement width='4.5rem'>
+                                <Button h='1.75rem' size='sm' onClick={handleClick}>
+                                {show ? 'Hide' : 'Show'}
+                                </Button>
+                            </InputRightElement>
+                        </InputGroup>
+                        </AlertDialogBody>
+
+                        <AlertDialogFooter>
+                        <Button ref={cancelRef} onClick={onClose}>
+                            Cancel
+                        </Button>
+                        <Button colorScheme='red' onClick={handlePassword} ml={3}>
+                            Login
+                        </Button>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                    </AlertDialogOverlay>
+                </AlertDialog>
+
             <HStack w="100%" display={'flex'}>
                 <Center flex={'1'} display={'flex'} justifyContent={'flex-start'} mr={'auto'} p='25'>
                     <Image src='https://i.gyazo.com/d74f92946aa2ebf071b955c824a1b64c.png' w='200px' alt='Logo' />
@@ -49,7 +115,8 @@ export default function UserPage(props) {
                         rightIcon={<SettingsIcon />}
                         variant='outline'
                         colorScheme='blue'
-                        onClick={() => props.navigatePage(1)}>
+                        // onClick={() => props.navigatePage(1)}>
+                        onClick={onOpen}>
                         Admin
                     </Button>
                 </Center>

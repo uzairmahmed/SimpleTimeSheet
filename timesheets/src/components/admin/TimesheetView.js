@@ -88,41 +88,7 @@ export default function TimesheetView(props) {
 
     let rows = []
 
-    Object.keys(val[0]).forEach(function (emp, index) {
-      if (val[0][emp].name) {
-        columns.push({
-          "id": "columnId_00." + (Math.floor(Math.random() * 1000000000)),
-          "Header": val[0][emp].name,
-          "Footer": "Total",
-          "columns": [
-            {
-              "id": "columnId_0_20." + (Math.floor(Math.random() * 1000000000)),
-              "Header": "In",
-              "Footer": "",
-              "accessor": val[0][emp].name + "_In"
-            },
-            {
-              "id": "columnId_0_20." + (Math.floor(Math.random() * 1000000000)),
-              "Header": "Out",
-              "Footer": "",
-              "accessor": val[0][emp].name + "_Out"
-            },
-            {
-              "id": "columnId_0_20." + (Math.floor(Math.random() * 1000000000)),
-              "Header": "Break",
-              "Footer": "",
-              "accessor": val[0][emp].name + "_Break"
-            },
-            {
-              "id": "columnId_0_20." + (Math.floor(Math.random() * 1000000000)),
-              "Header": "Total",
-              "Footer": "",
-              "accessor": val[0][emp].name + "_Total"
-            }
-          ]
-        })
-      }
-    })
+    let totals = {}
 
     val.forEach(date => {
       var options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -133,7 +99,19 @@ export default function TimesheetView(props) {
       temp["Key0"] = dateText
       temp["Key1"] = dayText
 
-      // console.log(val[0])
+      Object.keys(date).forEach(function (emp) {
+        if (typeof date[emp] === 'object') {
+          let tempLoyee = date[emp]
+          let tTotal = 0
+          if (tempLoyee.total) tTotal = parseFloat(tempLoyee.total)
+          if (totals[tempLoyee.id]){
+            totals[tempLoyee.id] = totals[tempLoyee.id] + tTotal
+          } else {
+            totals[tempLoyee.id] = tTotal
+          }
+        }
+      })
+
       Object.keys(val[0]).forEach(function (emp, index) {
         if (val[0][emp].name) {
           let IN = val[0][emp].name + "_In"
@@ -207,16 +185,15 @@ export default function TimesheetView(props) {
     let header1 = []
     let header2 = []
     let empRows = []
-    let footer = ["", ""]
+    let footer = []
 
     let sDate = selectedTSDataRAW[0].date
     let eDate = selectedTSDataRAW[selectedTSDataRAW.length - 1].date
 
     selectedTSData.columns.forEach(function (col) {
-      // console.log(selectedTSData.columns)
       if (col.Footer != ''){
         header1.push(col.Header, "", "", "")
-        footer.push("", "","", col.Footer)
+        footer.push("", "",col.Footer, selectedTSData.totals[col.eID])
       } else {
         footer.push(col.Footer)
         header1.push(col.Header)
@@ -260,10 +237,7 @@ export default function TimesheetView(props) {
           let ePay = 0
           let eNotes = "-"
 
-          if (tempLoyee.total) eTotal = parseFloat(tempLoyee.total)
-          if (otherlines[tempLoyee.id]) {
-            otherlines[tempLoyee.id].total = otherlines[tempLoyee.id].total + eTotal
-          } else {
+            if (selectedTSData.totals[emp]) eTotal = selectedTSData.totals[emp]
             if (tempLoyee.name) eName = tempLoyee.name
             if (tempLoyee.notes) eNotes = tempLoyee.notes
             if (tempLoyee.pay) ePay = tempLoyee.pay
@@ -273,7 +247,6 @@ export default function TimesheetView(props) {
               pay: ePay,
               notes: eNotes
             }
-          }
 
         }
       })
