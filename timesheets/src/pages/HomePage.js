@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 
-import { Center, SimpleGrid, HStack, Flex, Spacer, VStack, Text, Button, Image, Input, InputGroup, InputRightElement,
+import { Center, SimpleGrid, HStack, Flex, Spacer, Text, Button, Image, Input, InputGroup, InputRightElement,
     AlertDialog,AlertDialogBody,AlertDialogFooter,AlertDialogHeader,AlertDialogContent,AlertDialogOverlay,useDisclosure, 
     useToast,} from '@chakra-ui/react'
 import { SettingsIcon } from '@chakra-ui/icons'
@@ -8,7 +8,7 @@ import { SettingsIcon } from '@chakra-ui/icons'
 import UserCard from '../components/UserCard';
 
 import paddings from '../styles/styles';
-import { getEmployeeList, getCurrentTimesheet } from '../functions/Functions';
+import { getEmployeeList, getCurrentTimesheet } from '../functions/FirebaseFunctions';
 
 export default function UserPage(props) {
     const [employees, setEmployees] = useState([]);
@@ -41,7 +41,7 @@ export default function UserPage(props) {
     }
 
     function handlePassword(){
-        if (pValue == 'Uzair786'){
+        if (pValue === 'Uzair786'){
             console.log('allowed')
             props.navigatePage(1)
         } else {

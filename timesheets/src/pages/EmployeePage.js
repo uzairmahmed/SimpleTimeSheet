@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
 import {
-    Center, HStack, Flex, Spacer, VStack, Text, Button,
+    Center, HStack, Flex, Text, Button,
     Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton,
     SimpleGrid
 } from '@chakra-ui/react'
@@ -9,7 +9,7 @@ import { ArrowBackIcon } from '@chakra-ui/icons'
 
 import TimesheetEditForm from '../components/employee/TimesheetEditForm';
 
-import { addEmployeeToTimesheetifNotExists, getTimesheetData } from '../functions/Functions';
+import { addEmployeeToTimesheetifNotExists, getTimesheetData } from '../functions/FirebaseFunctions';
 
 export default function EmployeePage(props) {
     const [timesheet, setTimesheet] = useState([]);
@@ -17,17 +17,18 @@ export default function EmployeePage(props) {
     const [isOpen, setIsOpen] = useState(false);
     const [cTS, setcTS] = useState("");
 
-
-    useEffect(() => {
-        getEmployeeTimesheet()
-    }, []);
-
     async function getEmployeeTimesheet() {
         let cTS = await addEmployeeToTimesheetifNotExists(props.eID)
         let data = await getTimesheetData(cTS)
         setcTS(cTS)
         setTimesheet(data)
     }
+    
+    useEffect(() => {
+        getEmployeeTimesheet()
+    }, []);
+
+
 
     function getPrettyDate(date) {
         let d = new Date(date)

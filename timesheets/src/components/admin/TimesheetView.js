@@ -1,15 +1,14 @@
 import {
   Button, Center, HStack, VStack,
-  Menu, MenuButton, MenuList, MenuItem, MenuItemOption, MenuGroup, MenuOptionGroup, MenuDivider,
+  Menu, MenuButton, MenuList, MenuItem,
   Select,useToast
 } from '@chakra-ui/react'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import React, { useState, useEffect } from 'react'
-import { CSVLink, CSVDownload } from "react-csv";
 
 import TimesheetAdminChart from './TimesheetChart'
 
-import { getTimesheetData, getTimesheets, writeCurrentTimesheet, getCurrentTimesheet } from '../../functions/Functions';
+import { getTimesheetData, getTimesheets, writeCurrentTimesheet, getCurrentTimesheet } from '../../functions/FirebaseFunctions';
 import { exportPayrollSheet, exportTimeSheet } from '../../functions/ExcelFunctions';
 
 export default function TimesheetView(props) {
@@ -251,7 +250,7 @@ export default function TimesheetView(props) {
     let eDate = selectedTSDataRAW[selectedTSDataRAW.length - 1].date
 
     selectedTSData.columns.forEach(function (col) {
-      if (col.Footer != ''){
+      if (col.Footer !== ''){
         header1.push(col.Header, "", "", "")
         footer.push("", "",col.Footer, selectedTSData.totals[col.eID])
       } else {

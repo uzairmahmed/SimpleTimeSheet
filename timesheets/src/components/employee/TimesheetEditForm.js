@@ -12,7 +12,7 @@ import {
     useToast
 } from '@chakra-ui/react'
 
-import { getEmployeeTimesheet, writeHoursToEmployeeTimesheet } from '../../functions/Functions';
+import { getEmployeeTimesheet, writeHoursToEmployeeTimesheet } from '../../functions/FirebaseFunctions';
 
 export default function TimesheetEditForm(props) {
     const [isLoading, setisLoading] = useState(false);

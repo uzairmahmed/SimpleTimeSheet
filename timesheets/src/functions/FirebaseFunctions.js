@@ -168,8 +168,6 @@ export async function getEmployeeTimesheet(s_date, idx, eID){
 
 export async function writeHoursToEmployeeTimesheet(s_date, idx, eID, payload){
     const db = getDatabase();
-    const dbRef = ref(db);
-
     await set(ref(db, 'timesheets/'+s_date+"/"+idx+"/"+eID), payload).catch(error => {
         return error.message
     })

@@ -10,7 +10,7 @@ import {
     useToast
 } from '@chakra-ui/react'
 
-import { writeUserData } from '../../functions/Functions';
+import { writeUserData } from '../../functions/FirebaseFunctions';
 
 export default function TimesheetAdminView(props) {
     const [isLoading, setisLoading] = useState(false);

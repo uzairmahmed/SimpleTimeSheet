@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 
 import {
-    Center, HStack, Flex, Spacer, VStack, Text, Button,
+    Center, HStack, Flex, Text, Button,
     Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton,
     Tabs, TabList, TabPanels, Tab, TabPanel
 } from '@chakra-ui/react'
 import { ArrowBackIcon, AddIcon } from '@chakra-ui/icons'
 
-import { getEmployeeList } from '../functions/Functions';
+import { getEmployeeList } from '../functions/FirebaseFunctions';
 
 import TimesheetView from '../components/admin/TimesheetView';
 import EmployeeView from '../components/admin/EmployeeView';
@@ -29,14 +29,14 @@ export default function AdminPage(props) {
     }, []);
 
     function renderAddButton() {
-        if (tabIndex == 0) {
+        if (tabIndex === 0) {
             return (
                 <Button onClick={() => handleCreate1()}
                     rightIcon={<AddIcon />}
                     variant='outline'
                     colorScheme='blue'>New Timesheet</Button>
             )
-        } else if (tabIndex == 1) {
+        } else if (tabIndex === 1) {
             return (
 
                 <Button onClick={() => handleCreate2()}

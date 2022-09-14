@@ -1,10 +1,9 @@
 
 import React, { useEffect, useState } from 'react'
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form } from 'formik';
 import {
     FormControl,
     FormLabel,
-    Input,
     Button,
     Center,
     FormHelperText,
@@ -14,7 +13,7 @@ import {
 
 import { SingleDatepicker } from 'chakra-dayzed-datepicker';
 
-import { writeTimesheetData } from '../../functions/Functions';
+import { writeTimesheetData } from '../../functions/FirebaseFunctions';
 
 export default function TimesheetAdminView(props) {
     const [isLoading, setisLoading] = useState(false);
@@ -26,7 +25,7 @@ export default function TimesheetAdminView(props) {
 
     function validateStart(val) {
         if (!val) return "Required"
-        if (val.getDay() != 0) return "Timesheet must start on a Sunday"
+        if (val.getDay() !== 0) return "Timesheet must start on a Sunday"
     }
     async function handleSubmit() {
 

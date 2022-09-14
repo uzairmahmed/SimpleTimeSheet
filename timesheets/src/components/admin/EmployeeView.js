@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import {
-    Box, Center, HStack, VStack, Text, IconButton,
+    Box, Center, HStack, VStack,
     Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon,
     Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, Button,
-    Stat, StatLabel, StatNumber, StatHelpText, StatArrow, StatGroup,
+    Stat, StatLabel, StatNumber, StatHelpText,
 } from '@chakra-ui/react'
-import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
+import { EditIcon } from '@chakra-ui/icons'
 
 import EmployeeEditForm from './EmployeeEditForm'
 import EmployeeDeleteForm from './EmployeeDeleteForm'
-import EmployeeCreateForm from './EmployeeCreateForm'
 
-import { getEmployeeList } from '../../functions/Functions';
+import { getEmployeeList } from '../../functions/FirebaseFunctions';
 
 export default function EmployeeView(props) {
     const [data, setdata] = useState([]);
