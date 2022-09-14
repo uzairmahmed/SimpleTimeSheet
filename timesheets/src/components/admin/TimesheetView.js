@@ -168,13 +168,55 @@ export default function TimesheetView(props) {
         }
       })
       // console.log(temp)
+
       rows.push(temp)
     });
+    
+    Object.keys(val[0]).forEach(function (emp, index) {
+      if (val[0][emp].name) {
+        columns.push({
+          "id": "columnId_00." + (Math.floor(Math.random() * 1000000000)),
+          "Header": val[0][emp].name,
+          "eID" : emp,
+          "Footer": "Total Hours: " + totals[emp],
+          "columns": [
+            {
+              "id": "columnId_0_20." + (Math.floor(Math.random() * 1000000000)),
+              "Header": "In",
+              "Footer": "",
+              "accessor": val[0][emp].name + "_In"
+            },
+            {
+              "id": "columnId_0_20." + (Math.floor(Math.random() * 1000000000)),
+              "Header": "Out",
+              "Footer": "",
+              "accessor": val[0][emp].name + "_Out"
+            },
+            {
+              "id": "columnId_0_20." + (Math.floor(Math.random() * 1000000000)),
+              "Header": "Break",
+              "Footer": "",
+              "accessor": val[0][emp].name + "_Break"
+            },
+            {
+              "id": "columnId_0_20." + (Math.floor(Math.random() * 1000000000)),
+              "Header": "Total",
+              "Footer": "",
+              "accessor": val[0][emp].name + "_Total"
+            }
+          ]
+        })
+      }
+    })
+
+
 
     return {
       rows: rows,
-      columns: columns
+      columns: columns,
+      totals: totals
     }
+
   }
 
   function getTSChart() {
