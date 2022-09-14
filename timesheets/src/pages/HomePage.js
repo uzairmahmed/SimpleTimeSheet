@@ -8,7 +8,7 @@ import { SettingsIcon } from '@chakra-ui/icons'
 import UserCard from '../components/UserCard';
 
 import paddings from '../styles/styles';
-import { getEmployeeList, getCurrentTimesheet } from '../firebase/Functions';
+import { getEmployeeList, getCurrentTimesheet } from '../functions/Functions';
 
 export default function UserPage(props) {
     const [employees, setEmployees] = useState([]);

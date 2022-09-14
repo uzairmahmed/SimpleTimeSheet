@@ -11,7 +11,7 @@ import {
     FormErrorMessage,
 } from '@chakra-ui/react'
 
-import { getEmployeeTimesheet, writeHoursToEmployeeTimesheet } from '../../firebase/Functions';
+import { getEmployeeTimesheet, writeHoursToEmployeeTimesheet } from '../../functions/Functions';
 
 export default function TimesheetEditForm(props) {
     const [isLoading, setisLoading] = useState(false);

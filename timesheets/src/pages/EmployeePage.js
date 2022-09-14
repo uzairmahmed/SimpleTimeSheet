@@ -9,7 +9,7 @@ import { ArrowBackIcon } from '@chakra-ui/icons'
 
 import TimesheetEditForm from '../components/employee/TimesheetEditForm';
 
-import { addEmployeeToTimesheetifNotExists, getTimesheetData } from '../firebase/Functions';
+import { addEmployeeToTimesheetifNotExists, getTimesheetData } from '../functions/Functions';
 
 export default function EmployeePage(props) {
     const [timesheet, setTimesheet] = useState([]);

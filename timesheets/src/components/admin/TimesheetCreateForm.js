@@ -13,7 +13,7 @@ import {
 
 import { SingleDatepicker } from 'chakra-dayzed-datepicker';
 
-import { writeTimesheetData } from '../../firebase/Functions';
+import { writeTimesheetData } from '../../functions/Functions';
 
 export default function TimesheetAdminView(props) {
     const [isLoading, setisLoading] = useState(false);

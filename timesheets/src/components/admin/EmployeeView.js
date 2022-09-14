@@ -11,7 +11,7 @@ import EmployeeEditForm from './EmployeeEditForm'
 import EmployeeDeleteForm from './EmployeeDeleteForm'
 import EmployeeCreateForm from './EmployeeCreateForm'
 
-import { getEmployeeList } from '../../firebase/Functions';
+import { getEmployeeList } from '../../functions/Functions';
 
 export default function EmployeeView(props) {
     const [data, setdata] = useState([]);

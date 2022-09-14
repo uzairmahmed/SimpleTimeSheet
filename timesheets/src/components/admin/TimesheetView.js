@@ -9,8 +9,8 @@ import { CSVLink, CSVDownload } from "react-csv";
 
 import TimesheetAdminChart from './TimesheetChart'
 
-import { getTimesheetData, getTimesheets, writeCurrentTimesheet, getCurrentTimesheet } from '../../firebase/Functions';
-import { exportPayrollSheet, exportTimeSheet } from '../../firebase/ExcelFunctions';
+import { getTimesheetData, getTimesheets, writeCurrentTimesheet, getCurrentTimesheet } from '../../functions/Functions';
+import { exportPayrollSheet, exportTimeSheet } from '../../functions/ExcelFunctions';
 
 export default function TimesheetView(props) {
   const [timesheets, setTimesheets] = useState([]);

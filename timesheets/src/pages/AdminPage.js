@@ -7,7 +7,7 @@ import {
 } from '@chakra-ui/react'
 import { ArrowBackIcon, AddIcon } from '@chakra-ui/icons'
 
-import { getEmployeeList } from '../firebase/Functions';
+import { getEmployeeList } from '../functions/Functions';
 
 import TimesheetView from '../components/admin/TimesheetView';
 import EmployeeView from '../components/admin/EmployeeView';

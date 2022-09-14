@@ -5,7 +5,7 @@ import {
     Center,
 } from '@chakra-ui/react'
 
-import { deleteUserData } from '../../firebase/Functions';
+import { deleteUserData } from '../../functions/Functions';
 
 export default function TimesheetAdminView(props) {
     const [isLoading, setisLoading] = useState(false);
