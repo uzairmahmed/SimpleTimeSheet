@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import HomePage from './HomePage'
 import AdminPage from './AdminPage'
 import EmployeePage from './EmployeePage'
+import EmployeeViewPage from './EmployeeViewPage';
 
 export default function Main() {
     const [page, currentPage] = useState(0)
@@ -28,6 +29,11 @@ export default function Main() {
     else if (page === 2) {
         return (
             <EmployeePage eID={employee} navigatePage={(num, emp) => navigatePage(num, emp)} />
+        )
+    }
+    else if (page === 3) {
+        return (
+            <EmployeeViewPage navigatePage={(num, emp) => navigatePage(num, emp)} />
         )
     }
 

@@ -117,7 +117,7 @@ export default function AdminPage(props) {
 
                     <TabPanels>
                         <TabPanel>
-                            <TimesheetView refresh={refresh1}/>
+                            <TimesheetView activate={true} refresh={refresh1}/>
                         </TabPanel>
                         <TabPanel>
                             <EmployeeView refresh={refresh2}/>

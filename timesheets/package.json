@@ -1,10 +1,19 @@
 {
-  "name": "timesheets",
+  "name": "smiline_timesheets",
   "version": "0.1.0",
+  "license": "MIT",
   "private": true,
+  "main": "public/electron.js",
+  "homepage": "./",
+  "author": {
+    "name": "Uzair Ahmed",
+    "email": "uzairmahmed@gmail.com"
+  },
+  "description": "A simple Electron app",
   "dependencies": {
     "@chakra-ui/icons": "^2.0.8",
     "@chakra-ui/react": "^2.2.6",
+    "@electron-forge/maker-dmg": "^6.0.0-beta.66",
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
     "@linways/table-to-excel": "^1.0.4",
@@ -15,6 +24,8 @@
     "cross-env": "^7.0.3",
     "date-fns": "^2.29.2",
     "dayzed": "^3.2.3",
+    "electron-forge": "^5.2.4",
+    "electron-is-dev": "^2.0.0",
     "firebase": "^9.9.2",
     "formik": "^2.2.9",
     "framer-motion": "^7.0.1",
@@ -28,14 +39,17 @@
     "react-table": "^7.8.0",
     "web-vitals": "^2.1.4"
   },
-  "main": "public/electron.js",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "dev": "concurrently -k \"cross-env BROWSER=none npm start\" \"npm:electron\"",
-    "electron": "wait-on tcp:3000 && electron ."
+    "electron": "wait-on tcp:3000 && electron .",
+    "package": "react-scripts build && electron-forge package",
+    "make-mac": "react-scripts build && electron-forge make --platform darwin",
+    "make-linux": "react-scripts build && electron-forge make --platform linux",
+    "make": "react-scripts build && electron-forge make"
   },
   "eslintConfig": {
     "extends": [
@@ -56,9 +70,55 @@
     ]
   },
   "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.63",
+    "@electron-forge/maker-deb": "^6.0.0-beta.63",
+    "@electron-forge/maker-dmg": "^6.0.0-beta.63",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.63",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.63",
+    "@electron-forge/maker-zip": "^6.0.0-beta.63",
     "concurrently": "^7.3.0",
     "electron": "^20.0.1",
     "electron-is-dev": "^2.0.0",
     "wait-on": "^6.0.1"
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {},
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "smiline_timesheets"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {
+            "name": "smiline_timesheets"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {
+            "name": "smiline_timesheets"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-dmg",
+          "config": {
+            "name": "smiline_timesheets",
+            "format": "ULFO"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ]
+        }
+      ]
+    }
   }
 }

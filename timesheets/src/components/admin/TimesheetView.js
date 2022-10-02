@@ -26,8 +26,14 @@ export default function TimesheetView(props) {
   const toast = useToast()
 
   useEffect(() => {
+    preloadTimesheet()
+    // handleTimesheetSelect
     handleTimeSheets()
   }, [props.refresh]);
+
+  async function preloadTimesheet(){
+    handleTimesheetSelect(await getCurrentTimesheet())
+  }
 
   async function handleTimeSheets() {
     const tempTimesheets = await getTimesheets()
@@ -342,6 +348,7 @@ export default function TimesheetView(props) {
           ))}
         </Select>
 
+        {props.activate ? 
         <Button
           onClick={() => handleSet()}
           p={5}
@@ -353,6 +360,9 @@ export default function TimesheetView(props) {
         >
           Activate Timesheet
         </Button>
+        :
+        <></>
+      }
 
         <Menu>
           <MenuButton as={Button} p={5} pl={10} pr={10} rightIcon={<ChevronDownIcon ml="10" />}>
