@@ -5,7 +5,7 @@ import {
     AlertDialog, AlertDialogBody, AlertDialogFooter, AlertDialogHeader, AlertDialogContent, AlertDialogOverlay, useDisclosure,
     useToast,
 } from '@chakra-ui/react'
-import { SettingsIcon } from '@chakra-ui/icons'
+import { SettingsIcon, CalendarIcon } from '@chakra-ui/icons'
 
 import UserCard from '../components/UserCard';
 
@@ -143,7 +143,7 @@ export default function UserPage(props) {
                 </Center>
                 <Center display={'flex'} justifyContent={'flex-end'} flex={'1'} ml={'auto'} p='25'>
                     <Button
-                        rightIcon={<SettingsIcon />}
+                        rightIcon={<CalendarIcon />}
                         variant='outline'
                         colorScheme='blue'
                         onClick={() => props.navigatePage(3)}>

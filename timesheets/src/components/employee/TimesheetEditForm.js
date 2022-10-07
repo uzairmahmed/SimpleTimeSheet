@@ -105,7 +105,7 @@ export default function TimesheetEditForm(props) {
             
             breakT = Math.round(tempBreakT * 60)
             
-            totalT += tempBreakT
+            totalT -= tempBreakT
 
             totalT = totalT.toFixed(2)
 
