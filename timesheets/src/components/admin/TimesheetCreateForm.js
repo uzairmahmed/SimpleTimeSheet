@@ -42,22 +42,24 @@ export default function TimesheetAdminView(props) {
             }
 
             await writeTimesheetData(payload).then((val)=>{
-                if (val){
+                // console.log(val)
+                // if (val){
                     toast({
                         title: 'Created Timesheet',
                         status: 'success',
                         duration: 2500,
                         isClosable: true,
                       })
-                } else {
-                    toast({
-                        title: 'Error',
-                        description: val,
-                        status: 'error',
-                        duration: 6500,
-                        isClosable: true,
-                      })
-                }
+                // } 
+                // else {
+                //     toast({
+                //         title: 'Error',
+                //         description: val,
+                //         status: 'error',
+                //         duration: 6500,
+                //         isClosable: true,
+                //       })
+                // }
             })
             setisLoading(false)
             props.onclose()
@@ -135,7 +137,7 @@ export default function TimesheetAdminView(props) {
                         m={5}
                         type='submit'
                         isLoading={isLoading}
-                        loadingText='Creating User'
+                        loadingText='Creating Timesheet'
                         colorScheme='blue'
                         variant='solid'
                     >

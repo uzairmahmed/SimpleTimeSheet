@@ -36,15 +36,15 @@ export async function deleteUserData(id) {
 
 export async function writeTimesheetData(data) {
     const db = getDatabase();
-    return data.dates.forEach(function (date, index) {
-        set(ref(db, 'timesheets/' + data.id + '/' + index), {
+    return await data.dates.forEach(async (date, index) => {
+        return await set(ref(db, 'timesheets/' + data.id + '/' + index), {
             date:date,
             total:0
-        });
-    }).then(() => {
-        return true
-    }).catch(error => {
-        return error.message
+        }).then(() => {
+            return true
+        }).catch(error => {
+            return error.message
+        })
     })
 }
 

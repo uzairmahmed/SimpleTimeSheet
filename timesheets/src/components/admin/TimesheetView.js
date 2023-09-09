@@ -29,7 +29,12 @@ export default function TimesheetView(props) {
     preloadTimesheet()
     // handleTimesheetSelect
     handleTimeSheets()
+    
   }, [props.refresh]);
+  useEffect(() => {
+    console.log(timesheets)
+
+  }, [timesheets]);
 
   async function preloadTimesheet(){
     handleTimesheetSelect(await getCurrentTimesheet())
@@ -344,7 +349,7 @@ export default function TimesheetView(props) {
           onChange={(e) => handleTimesheetSelect(e.target.value)}
           placeholder={"Select a Timesheet to View"}>
           {timesheets.map(ts => (
-            <option value={ts[0].date}>{ts[0].date}</option>
+            <option value={ts[0]?.date}>{ts[0]?.date}</option>
           ))}
         </Select>
 
