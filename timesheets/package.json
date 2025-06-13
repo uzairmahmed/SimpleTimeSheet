@@ -13,7 +13,6 @@
   "dependencies": {
     "@chakra-ui/icons": "^2.0.8",
     "@chakra-ui/react": "^2.2.6",
-    "@electron-forge/maker-dmg": "^6.0.0-beta.66",
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
     "@linways/table-to-excel": "^1.0.4",
@@ -49,6 +48,7 @@
     "package": "react-scripts build && electron-forge package",
     "make-mac": "react-scripts build && electron-forge make --platform darwin",
     "make-linux": "react-scripts build && electron-forge make --platform linux",
+    "make-mas": "react-scripts build && electron-forge make --platform mas",
     "make": "react-scripts build && electron-forge make"
   },
   "eslintConfig": {
@@ -72,10 +72,11 @@
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.63",
     "@electron-forge/maker-deb": "^6.0.0-beta.63",
-    "@electron-forge/maker-dmg": "^6.0.0-beta.63",
+    "@electron-forge/maker-dmg": "^6.4.2",
     "@electron-forge/maker-rpm": "^6.0.0-beta.63",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.63",
     "@electron-forge/maker-zip": "^6.0.0-beta.63",
+    "appdmg": "^0.6.6",
     "concurrently": "^7.3.0",
     "electron": "^20.0.1",
     "electron-is-dev": "^2.0.0",
@@ -106,7 +107,7 @@
         {
           "name": "@electron-forge/maker-dmg",
           "config": {
-            "name": "smiline_timesheets",
+            "background": "./src/assets/IconDark.png",
             "format": "ULFO"
           }
         },
