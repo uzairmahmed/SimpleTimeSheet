@@ -1,111 +1,64 @@
-import React, { useState, useEffect } from "react";
-import {
-  Box,
-  Paper,
-  Typography,
-  Grid,
-  styled,
-  useTheme,
-  darken,
-  lighten,
-} from "@mui/material";
-// Make sure to install date-fns with: npm install date-fns
-import { format, addDays, isToday, isSameDay, parseISO } from "date-fns";
+import React, { useState, useEffect, useMemo } from "react";
+import { Box, Typography, CircularProgress } from "@mui/material";
+import { format, addDays, setHours, setMinutes } from "date-fns";
+import CalendarComponent from "./CalendarComponent";
 
-interface CalendarViewProps {
-  startDate: Date | string; // The start date of the two-week period
-  endDate: Date | string; // The end date of the two-week period
-  events?: Array<{
-    id: string;
-    title: string;
-    start: Date | string;
-    end: Date | string;
-    color?: string;
-  }>;
-  onDateClick?: (date: Date) => void;
+// Timesheet entry type
+interface TimesheetEntry {
+  id: string;
+  name: string;
+  start: Date;
+  end: Date;
 }
 
-const CalendarCell = styled(Paper)(({ theme }) => ({
-  height: "120px",
-  padding: theme.spacing(1),
-  display: "flex",
-  flexDirection: "column",
-  cursor: "pointer",
-  transition: "background-color 0.2s ease",
-  "&:hover": {
-    backgroundColor:
-      theme.palette.mode === "dark"
-        ? lighten(theme.palette.background.paper, 0.1)
-        : darken(theme.palette.background.paper, 0.05),
-  },
-  overflow: "hidden",
-}));
+const names = ["Alice", "Bob", "Charlie", "Diana"];
 
-const TodayCell = styled(CalendarCell)(({ theme }) => ({
-  border: `2px solid ${theme.palette.primary.main}`,
-}));
-
-const DateLabel = styled(Typography)(({ theme }) => ({
-  fontWeight: "bold",
-  marginBottom: theme.spacing(1),
-}));
-
-const Event = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(0.5),
-  borderRadius: theme.shape.borderRadius,
-  marginBottom: theme.spacing(0.5),
-  fontSize: "0.75rem",
-  whiteSpace: "nowrap",
-  overflow: "hidden",
-  textOverflow: "ellipsis",
-}));
-
-const getDatesInRange = (start: Date, end: Date): Date[] => {
-  const dates: Date[] = [];
-  let currentDate = start;
-
-  while (currentDate <= end) {
-    dates.push(new Date(currentDate));
-    currentDate = addDays(currentDate, 1);
+const getTimesheetEntriesForRange = (start: Date, end: Date): TimesheetEntry[] => {
+  const entries: TimesheetEntry[] = [];
+  let current = new Date(start);
+  let id = 1;
+  while (current <= end) {
+    if (current.getDay() === 1 || current.getDay() === 3) {
+      // Example: Each day has 1-2 random entries
+      const numEntries = Math.floor(Math.random() * 2) + 1;
+      for (let i = 0; i < numEntries; i++) {
+        const name = names[Math.floor(Math.random() * names.length)];
+        // Random start between 8:00-10:00, end between 16:00-18:00
+        const startTime = setMinutes(setHours(new Date(current), 8 + Math.floor(Math.random() * 3)), 0);
+        const endTime = setMinutes(setHours(new Date(current), 16 + Math.floor(Math.random() * 3)), 0);
+        entries.push({
+          id: `${id}`,
+          name,
+          start: startTime,
+          end: endTime,
+        });
+        id++;
+      }
+    }
+    current = addDays(current, 1);
   }
-
-  return dates;
+  return entries;
 };
 
-const CalendarView: React.FC<CalendarViewProps> = ({
-  startDate,
-  endDate,
-  events = [],
-  onDateClick,
-}) => {
-  const theme = useTheme();
-  const [dateRange, setDateRange] = useState<Date[]>([]);
+const CalendarView: React.FC = () => {
+  // Hardcoded start and end dates (memoized)
+  const startDate = useMemo(() => new Date(2023, 5, 1), []); // June 1, 2023
+  const endDate = useMemo(() => new Date(2023, 5, 14), []); // June 14, 2023
 
-  // Parse dates if they're strings
-  const parseDate = (date: Date | string): Date => {
-    return typeof date === "string" ? parseISO(date) : date;
-  };
+  const [entries, setEntries] = useState<TimesheetEntry[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Initialize the date range
   useEffect(() => {
-    const start = parseDate(startDate);
-    const end = parseDate(endDate);
-    setDateRange(getDatesInRange(start, end));
+    setLoading(true);
+    // Simulate async fetch
+    setTimeout(() => {
+      setEntries(getTimesheetEntriesForRange(startDate, endDate));
+      setLoading(false);
+    }, 1200);
   }, [startDate, endDate]);
 
-  // Get events for a specific date
-  const getEventsForDate = (date: Date) => {
-    return events.filter((event) => {
-      const eventStart = parseDate(event.start);
-      return isSameDay(date, eventStart);
-    });
-  };
-
-  // Handle date cell click
-  const handleDateClick = (date: Date) => {
-    if (onDateClick) {
-      onDateClick(date);
-    }
+  const onDateClick = (date: Date) => {
+    alert(`Clicked date: ${date.toDateString()}`);
   };
 
   return (
@@ -126,54 +79,29 @@ const CalendarView: React.FC<CalendarViewProps> = ({
         }}
       >
         <Typography variant="h5" gutterBottom>
-          Two-Week Calendar:{" "}
-          {dateRange.length > 0 &&
-            `${format(dateRange[0], "MMM d")} - ${format(
-              dateRange[dateRange.length - 1],
-              "MMM d, yyyy"
-            )}`}
+          Two-Week Calendar: {format(startDate, "MMM d")} -{" "}
+          {format(endDate, "MMM d, yyyy")}
         </Typography>
       </Box>
-
-      <Box sx={{ flexGrow: 1, overflow: "auto" }}>
-        <Grid container spacing={1}>
-          {/* Day header row */}
-          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-            <Grid size={12/7} key={day}>
-              <Typography align="center" fontWeight="bold">
-                {day}
-              </Typography>
-            </Grid>
-          ))}
-
-          {/* Calendar days */}
-          {dateRange.map((date) => {
-            const dayEvents = getEventsForDate(date);
-            const CellComponent = isToday(date) ? TodayCell : CalendarCell;
-
-            return (
-              <Grid size={12/7} key={date.toString()}>
-                <CellComponent onClick={() => handleDateClick(date)}>
-                  <DateLabel>{format(date, "d")}</DateLabel>
-                  {dayEvents.map((event) => (
-                    <Event
-                      key={event.id}
-                      sx={{
-                        bgcolor: event.color || theme.palette.primary.light,
-                        color: theme.palette.getContrastText(
-                          event.color || theme.palette.primary.light
-                        ),
-                      }}
-                    >
-                      {event.title}
-                    </Event>
-                  ))}
-                </CellComponent>
-              </Grid>
-            );
-          })}
-        </Grid>
-      </Box>
+      {loading ? (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flex: 1,
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      ) : (
+        <CalendarComponent
+          startDate={startDate}
+          endDate={endDate}
+          entries={entries}
+          onDateClick={onDateClick}
+        />
+      )}
     </Box>
   );
 };

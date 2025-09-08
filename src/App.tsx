@@ -3,7 +3,7 @@ import UserList from "./components/user/UserList";
 import theme from "./theme";
 import AppHeader from "./components/common/AppHeader";
 import CalendarView from "./components/user/CalendarView";
-import { addDays } from "date-fns/addDays";
+import AppFooter from "./components/common/AppFooter";
 
 function App() {
   return (
@@ -20,6 +20,7 @@ function App() {
         }}
       >
         <AppHeader title="Smiline Timesheets" />
+        
         <Box
           sx={{
             flexGrow: 1,
@@ -29,35 +30,10 @@ function App() {
           }}
         >
           {/* <UserList /> */}
-          <CalendarView
-            startDate={new Date(2023, 5, 1)}
-            endDate={new Date(2023, 5, 14)}
-            events={[
-              {
-                id: "1",
-                title: "Meeting",
-                start: new Date(2023, 5, 3),
-                end: new Date(2023, 5, 3),
-              },
-            ]}
-            onDateClick={(date) => console.log("Date clicked:", date)}
-          />
+          <CalendarView />
         </Box>
 
-        <Box
-          component="footer"
-          sx={{
-            py: 2,
-            textAlign: "center",
-            color: "text.secondary",
-            fontSize: 14,
-            borderTop: "1px solid",
-            borderColor: "divider",
-            bgcolor: "transparent",
-          }}
-        >
-          © {new Date().getFullYear()} Smiline Dentistry. All rights reserved.
-        </Box>
+        <AppFooter />
       </Box>
     </ThemeProvider>
   );
