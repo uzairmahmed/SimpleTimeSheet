@@ -5,7 +5,7 @@ import {
   Stack,
   Box,
   TextField,
-  InputAdornment
+  InputAdornment,
 } from "@mui/material";
 import React, { useState } from "react";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
@@ -31,8 +31,9 @@ const UserList: React.FC = () => {
     { id: 14, active: false, name: "Aiman Sohail" },
   ];
 
-  const filteredUsers = dummyUsers.filter((user) =>
-    user.active && user.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredUsers = dummyUsers.filter(
+    (user) =>
+      user.active && user.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -41,16 +42,21 @@ const UserList: React.FC = () => {
         display: "flex",
         flexDirection: "column",
         px: { xs: 2, md: 4 },
-        height: "100%"
+        height: "100%",
       }}
     >
-      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", py: 2}}>
-        <Typography
-          variant="h6"
-          sx={{ fontWeight: 600, color: "text.primary" }}
-        >
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          py: 2,
+        }}
+      >
+        <Typography variant="h5" gutterBottom>
           Select a User
         </Typography>
+
 
         <TextField
           placeholder="Search users..."
@@ -68,7 +74,9 @@ const UserList: React.FC = () => {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <SearchIcon sx={{ color: "text.disabled", fontSize: "1.1rem" }} />
+                <SearchIcon
+                  sx={{ color: "text.disabled", fontSize: "1.1rem" }}
+                />
               </InputAdornment>
             ),
           }}
