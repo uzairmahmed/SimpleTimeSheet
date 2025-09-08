@@ -52,6 +52,10 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 12,
+          boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+        },
+        elevation1: {
+          boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
         },
       },
     },
@@ -64,6 +68,13 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 8,
+        },
+      },
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
         },
       },
     },
