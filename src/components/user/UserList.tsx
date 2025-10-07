@@ -10,30 +10,16 @@ import {
 import React, { useState } from "react";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import SearchIcon from "@mui/icons-material/Search";
+import type { User } from "../../types/user";
 
-const UserList: React.FC = () => {
+const UserList: React.FC<{ users: User[] }> = ({ users }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
-  const dummyUsers = [
-    { id: 1, active: true, name: "Gurpreet Bhamrah" },
-    { id: 2, active: true, name: "Carolina Meija" },
-    { id: 3, active: true, name: "Syeda Ali" },
-    { id: 4, active: true, name: "Uzair Ahmed" },
-    { id: 5, active: false, name: "Shiza Ahmed" },
-    { id: 6, active: false, name: "Syed Hussain" },
-    { id: 7, active: false, name: "Fadi Matloub" },
-    { id: 8, active: true, name: "Hina Ahmar" },
-    { id: 9, active: false, name: "Samreen Ali" },
-    { id: 10, active: true, name: "Uzma Jatoi" },
-    { id: 11, active: false, name: "Aqleema Rehman" },
-    { id: 12, active: true, name: "Keysa Fatima" },
-    { id: 13, active: false, name: "Um E Rubab" },
-    { id: 14, active: false, name: "Aiman Sohail" },
-  ];
-
-  const filteredUsers = dummyUsers.filter(
+  const filteredUsers = users.filter(
     (user) =>
-      user.active && user.name.toLowerCase().includes(searchTerm.toLowerCase())
+      user.active && `${user.first_name} ${user.last_name}`
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -56,7 +42,6 @@ const UserList: React.FC = () => {
         <Typography variant="h5" gutterBottom>
           Select a User
         </Typography>
-
 
         <TextField
           placeholder="Search users..."
@@ -105,8 +90,8 @@ const UserList: React.FC = () => {
                 }}
               >
                 <Avatar
-                  alt={user.name}
-                  src={`/static/images/avatar/${user.id}.jpg`}
+                  alt={user.first_name + " " + user.last_name}
+                  src={`/static/images/avatar/${user.username}.jpg`}
                   sx={{
                     // bgcolor: `hsl(${user.id * 50}, 70%, 50%)`,
                     bgcolor: "secondary.main",
@@ -116,7 +101,7 @@ const UserList: React.FC = () => {
                     fontSize: 18,
                   }}
                 >
-                  {user.name[0]}
+                  {user.first_name[0] + user.last_name[0]}
                 </Avatar>
                 <Typography
                   variant="body1"
@@ -127,7 +112,7 @@ const UserList: React.FC = () => {
                     flexGrow: 1,
                   }}
                 >
-                  {user.name}
+                  {user.first_name + " " + user.last_name}
                 </Typography>
                 <ArrowForwardIcon sx={{ color: "text.disabled" }} />
               </Card>

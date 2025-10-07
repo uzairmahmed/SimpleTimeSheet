@@ -1,9 +1,11 @@
 import { CssBaseline, ThemeProvider, Box } from "@mui/material";
-import UserList from "./components/user/UserList";
 import theme from "./theme";
 import AppHeader from "./components/common/AppHeader";
-import CalendarView from "./components/user/CalendarView";
 import AppFooter from "./components/common/AppFooter";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import User from "./pages/User";
+import Admin from "./pages/Admin";
 
 function App() {
   return (
@@ -15,12 +17,11 @@ function App() {
           display: "flex",
           flexDirection: "column",
           bgcolor: "#f5f7fa",
-          height: "100vh", // Fixed height
-          overflow: "hidden", // Prevent app-level scrolling
+          height: "100vh",
+          overflow: "hidden",
         }}
       >
         <AppHeader title="Smiline Timesheets" />
-        
         <Box
           sx={{
             flexGrow: 1,
@@ -29,10 +30,14 @@ function App() {
             flexDirection: "column",
           }}
         >
-          {/* <UserList /> */}
-          <CalendarView />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/user" element={<User />} />
+              <Route path="/admin" element={<Admin />} />
+            </Routes>
+          </BrowserRouter>
         </Box>
-
         <AppFooter />
       </Box>
     </ThemeProvider>

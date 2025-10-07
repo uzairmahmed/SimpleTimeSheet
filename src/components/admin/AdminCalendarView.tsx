@@ -1,15 +1,10 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Box, Typography, CircularProgress } from "@mui/material";
 import { format, addDays, setHours, setMinutes } from "date-fns";
-import CalendarComponent from "./CalendarComponent";
+import CalendarComponent from "../common/CalendarComponent";
+import type { TimesheetEntry } from "../../types/user";
 
 // Timesheet entry type
-interface TimesheetEntry {
-  id: string;
-  name: string;
-  start: Date;
-  end: Date;
-}
 
 const names = ["Alice", "Bob", "Charlie", "Diana"];
 
@@ -40,13 +35,17 @@ const getTimesheetEntriesForRange = (start: Date, end: Date): TimesheetEntry[] =
   return entries;
 };
 
-const CalendarView: React.FC = () => {
+const AdminCalendarView: React.FC = () => {
   // Hardcoded start and end dates (memoized)
   const startDate = useMemo(() => new Date(2023, 5, 1), []); // June 1, 2023
   const endDate = useMemo(() => new Date(2023, 5, 14), []); // June 14, 2023
 
   const [entries, setEntries] = useState<TimesheetEntry[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Modal state
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   useEffect(() => {
     setLoading(true);
@@ -58,7 +57,20 @@ const CalendarView: React.FC = () => {
   }, [startDate, endDate]);
 
   const onDateClick = (date: Date) => {
-    alert(`Clicked date: ${date.toDateString()}`);
+    setSelectedDate(date);
+    setModalOpen(true);
+  };
+
+  const handleClose = () => {
+    setModalOpen(false);
+    setSelectedDate(null);
+  };
+
+  // Optionally handle submit here
+  const handleSubmit = (data: { date: Date; startTime: string; endTime: string }) => {
+    // ...handle submission logic...
+    setModalOpen(false);
+    setSelectedDate(null);
   };
 
   return (
@@ -102,8 +114,9 @@ const CalendarView: React.FC = () => {
           onDateClick={onDateClick}
         />
       )}
+
     </Box>
   );
 };
 
-export default CalendarView;
+export default AdminCalendarView;
