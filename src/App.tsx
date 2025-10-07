@@ -11,35 +11,35 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box
-        sx={{
-          minHeight: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          bgcolor: "#f5f7fa",
-          height: "100vh",
-          overflow: "hidden",
-        }}
-      >
-        <AppHeader title="Smiline Timesheets" />
+      <BrowserRouter>
         <Box
           sx={{
-            flexGrow: 1,
-            overflow: "hidden",
+            minHeight: "100vh",
             display: "flex",
             flexDirection: "column",
+            bgcolor: "#f5f7fa",
+            height: "100vh",
+            overflow: "hidden",
           }}
         >
-          <BrowserRouter>
+          <AppHeader title="Smiline Timesheets" />
+          <Box
+            sx={{
+              flexGrow: 1,
+              overflow: "hidden",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
             <Routes>
-              {/* <Route path="/" element={<Home />} /> */}
-              <Route path="/" element={<User />} />
-              {/* <Route path="/admin" element={<Admin />} /> */}
+              <Route path="/" element={<Home />} />
+              <Route path="/user/:id" element={<User />} />
+              <Route path="/admin" element={<Admin />} />
             </Routes>
-          </BrowserRouter>
+          </Box>
+          <AppFooter />
         </Box>
-        <AppFooter />
-      </Box>
+      </BrowserRouter>
     </ThemeProvider>
   );
 }

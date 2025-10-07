@@ -7,7 +7,7 @@ import { getUserTimesheetEntries } from "../../api/timesheet";
 import type { TimeSheetEntryNew } from "../../types/user";
 import { format } from "date-fns";
 
-const UserCalendarView: React.FC = () => {
+const UserCalendarView: React.FC<{ userId: string }> = ({ userId }) => {
   // Hardcoded start and end dates (memoized)
   const startDate = useMemo(() => new Date(2023, 5, 1), []); // June 1, 2023
   const endDate = useMemo(() => new Date(2023, 5, 14), []); // June 14, 2023
@@ -23,10 +23,10 @@ const UserCalendarView: React.FC = () => {
     setLoading(true);
     // Simulate async fetch
     setTimeout(() => {
-      setEntries(getUserTimesheetEntries("1"));
+      setEntries(getUserTimesheetEntries(userId));
       setLoading(false);
     }, 1200);
-  }, [startDate, endDate]);
+  }, [startDate, endDate, userId]);
 
   const onDateClick = (date: Date) => {
     setSelectedDate(date);

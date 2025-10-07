@@ -11,9 +11,11 @@ import React, { useState } from "react";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import SearchIcon from "@mui/icons-material/Search";
 import type { User } from "../../types/user";
+import { useNavigate } from "react-router-dom";
 
 const UserList: React.FC<{ users: User[] }> = ({ users }) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
 
   const filteredUsers = users.filter(
     (user) =>
@@ -21,6 +23,10 @@ const UserList: React.FC<{ users: User[] }> = ({ users }) => {
         .toLowerCase()
         .includes(searchTerm.toLowerCase())
   );
+
+  const handleUserClick = (userId: string) => {
+    navigate(`/user/${userId}`);
+  };
 
   return (
     <Box
@@ -88,6 +94,7 @@ const UserList: React.FC<{ users: User[] }> = ({ users }) => {
                     transform: "translateY(-2px)",
                   },
                 }}
+                onClick={() => handleUserClick(user.id)}
               >
                 <Avatar
                   alt={user.first_name + " " + user.last_name}

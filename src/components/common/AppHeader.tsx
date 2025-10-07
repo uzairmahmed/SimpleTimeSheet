@@ -3,12 +3,22 @@ import { AppBar, Toolbar, Typography, Box, IconButton, Divider } from '@mui/mate
 import LogoLightHorizontal from '../../../src/assets/LogoLightHorizontal.svg';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface AppHeaderProps {
     title?: string;
 }
 
 const AppHeader: React.FC<AppHeaderProps> = ({ title = 'Smiline Timesheets' }) => {
+    const location = useLocation();
+    const navigate = useNavigate();
+    const isHome = location.pathname === '/';
+
+    const handleBack = () => {
+        navigate(-1);
+    };
+
     return (
         <AppBar 
             position="sticky" 
@@ -22,6 +32,11 @@ const AppHeader: React.FC<AppHeaderProps> = ({ title = 'Smiline Timesheets' }) =
         >
             <Toolbar disableGutters sx={{ display: 'flex', justifyContent: 'space-between', py: 1, px: 3 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    {!isHome && (
+                        <IconButton color="default" onClick={handleBack} sx={{ mr: 1 }}>
+                            <ArrowBackIcon />
+                        </IconButton>
+                    )}
                     <Box 
                         component="img" 
                         src={LogoLightHorizontal} 
