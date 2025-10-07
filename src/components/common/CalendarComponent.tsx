@@ -10,19 +10,13 @@ import {
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { format, addDays, isToday, isSameDay, parseISO } from "date-fns";
+import type { TimeSheetEntryNew } from "../../types/user";
 
 // CalendarComponent receives startDate, endDate, events, and onDateClick as props and renders the calendar grid
-interface TimesheetEntry {
-  id: string;
-  name: string;
-  start: Date | string;
-  end: Date | string;
-}
-
 interface CalendarComponentProps {
   startDate: Date | string;
   endDate: Date | string;
-  entries?: TimesheetEntry[];
+  entries?: TimeSheetEntryNew[];
   onDateClick?: (date: Date) => void;
 }
 
@@ -77,6 +71,7 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({
   entries = [],
   onDateClick,
 }) => {
+
   const theme = useTheme();
   const parseDate = (date: Date | string): Date =>
     typeof date === "string" ? parseISO(date) : date;
@@ -86,7 +81,7 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({
 
   const getEntriesForDate = (date: Date) => {
     return entries.filter((entry) => {
-      const entryStart = parseDate(entry.start);
+      const entryStart = parseDate(entry.startTime);
       return isSameDay(date, entryStart);
     });
   };
@@ -126,6 +121,7 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({
         {/* Calendar days */}
         {dateRange.map((date) => {
           const dayEntries = getEntriesForDate(date);
+          console.log("Entries for date", date, dayEntries);
           const CellComponent = isToday(date) ? TodayCell : CalendarCell;
           return (
             <Grid size={12 / 7} key={date.toString()}>
@@ -142,11 +138,11 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({
                     }}
                   >
                     <Typography variant="subtitle2" fontWeight="bold">
-                      {entry.name}
+                      {entry.userId}
                     </Typography>
                     <Typography variant="caption">
-                      {format(parseDate(entry.start), "HH:mm")} -{" "}
-                      {format(parseDate(entry.end), "HH:mm")}
+                      {format(parseDate(entry.startTime), "HH:mm")} -{" "}
+                      {format(parseDate(entry.endTime), "HH:mm")}
                     </Typography>
                   </Event>
                 ))}

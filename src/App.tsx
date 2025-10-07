@@ -32,9 +32,9 @@ function App() {
         >
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/user" element={<User />} />
-              <Route path="/admin" element={<Admin />} />
+              {/* <Route path="/" element={<Home />} /> */}
+              <Route path="/" element={<User />} />
+              {/* <Route path="/admin" element={<Admin />} /> */}
             </Routes>
           </BrowserRouter>
         </Box>

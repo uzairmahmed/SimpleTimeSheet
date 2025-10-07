@@ -1,52 +1,18 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Box, Typography, CircularProgress } from "@mui/material";
-import { format, addDays, setHours, setMinutes } from "date-fns";
 import CalendarComponent from "../common/CalendarComponent";
 import CalendarTimeEntryModal from "./UserCalendarModal";
 
-// Timesheet entry type
-interface TimesheetEntry {
-  id: string;
-  name: string;
-  start: Date;
-  end: Date;
-}
-
-const names = ["John", "Snow", "Beta", "Dorothy"];
-
-const getTimesheetEntriesForRange = (start: Date, end: Date): TimesheetEntry[] => {
-  const entries: TimesheetEntry[] = [];
-  let current = new Date(start);
-  let id = 1;
-  while (current <= end) {
-    if (current.getDay() === 1 || current.getDay() === 3) {
-      // Example: Each day has 1-2 random entries
-      const numEntries = Math.floor(Math.random() * 2) + 1;
-      for (let i = 0; i < numEntries; i++) {
-        const name = names[Math.floor(Math.random() * names.length)];
-        // Random start between 8:00-10:00, end between 16:00-18:00
-        const startTime = setMinutes(setHours(new Date(current), 8 + Math.floor(Math.random() * 3)), 0);
-        const endTime = setMinutes(setHours(new Date(current), 16 + Math.floor(Math.random() * 3)), 0);
-        entries.push({
-          id: `${id}`,
-          name,
-          start: startTime,
-          end: endTime,
-        });
-        id++;
-      }
-    }
-    current = addDays(current, 1);
-  }
-  return entries;
-};
+import { getUserTimesheetEntries } from "../../api/timesheet";
+import type { TimeSheetEntryNew } from "../../types/user";
+import { format } from "date-fns";
 
 const UserCalendarView: React.FC = () => {
   // Hardcoded start and end dates (memoized)
   const startDate = useMemo(() => new Date(2023, 5, 1), []); // June 1, 2023
   const endDate = useMemo(() => new Date(2023, 5, 14), []); // June 14, 2023
 
-  const [entries, setEntries] = useState<TimesheetEntry[]>([]);
+  const [entries, setEntries] = useState<TimeSheetEntryNew[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Modal state
@@ -57,7 +23,7 @@ const UserCalendarView: React.FC = () => {
     setLoading(true);
     // Simulate async fetch
     setTimeout(() => {
-      setEntries(getTimesheetEntriesForRange(startDate, endDate));
+      setEntries(getUserTimesheetEntries("1"));
       setLoading(false);
     }, 1200);
   }, [startDate, endDate]);

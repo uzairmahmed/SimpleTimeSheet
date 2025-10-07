@@ -14,3 +14,13 @@ export interface TimesheetEntry {
   start: Date;
   end: Date;
 }
+
+export interface TimeSheetEntryNew {
+  id: string;
+  userId: string;
+  date: Date;
+  startTime: Date; // "HH:mm" format
+  endTime: Date;   // "HH:mm" format
+  breakMinutes?: number;
+  totalHours?: number;
+}
