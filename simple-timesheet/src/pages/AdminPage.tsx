@@ -4,9 +4,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Employee } from "@/types";
+import { Employee, CurrentTimesheet } from "@/types";
 import { api } from "@/services/api";
-import { ArrowLeft, Plus, Edit, Trash2 } from "lucide-react";
+import { ArrowLeft, Plus, Edit, Trash2, CalendarDays } from "lucide-react";
 
 interface AdminPageProps {
   onNavigate: (page: string) => void;
@@ -14,8 +14,10 @@ interface AdminPageProps {
 
 export function AdminPage({ onNavigate }: AdminPageProps) {
   const [employees, setEmployees] = useState<Employee[]>([]);
+  const [currentTimesheet, setCurrentTimesheet] = useState<CurrentTimesheet | null>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isTimesheetOpen, setIsTimesheetOpen] = useState(false);
   const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null);
   
   const [formData, setFormData] = useState({
@@ -24,16 +26,31 @@ export function AdminPage({ onNavigate }: AdminPageProps) {
     pay: 0,
   });
 
+  const [timesheetData, setTimesheetData] = useState({
+    startDate: "",
+    endDate: "",
+  });
+
   useEffect(() => {
-    loadEmployees();
+    loadData();
   }, []);
 
-  const loadEmployees = async () => {
+  const loadData = async () => {
     try {
       const emps = await api.getEmployees();
       setEmployees(emps);
+      
+      const ts = await api.getCurrentTimesheet();
+      setCurrentTimesheet(ts);
+      
+      if (ts) {
+        setTimesheetData({
+          startDate: ts.start_date,
+          endDate: ts.end_date,
+        });
+      }
     } catch (error) {
-      console.error("Error loading employees:", error);
+      console.error("Error loading data:", error);
     }
   };
 
@@ -42,7 +59,7 @@ export function AdminPage({ onNavigate }: AdminPageProps) {
       await api.createEmployee(formData.name, formData.notes, formData.pay);
       setIsCreateOpen(false);
       setFormData({ name: "", notes: "", pay: 0 });
-      loadEmployees();
+      loadData();
     } catch (error) {
       console.error("Error creating employee:", error);
     }
@@ -56,7 +73,7 @@ export function AdminPage({ onNavigate }: AdminPageProps) {
       setIsEditOpen(false);
       setEditingEmployee(null);
       setFormData({ name: "", notes: "", pay: 0 });
-      loadEmployees();
+      loadData();
     } catch (error) {
       console.error("Error updating employee:", error);
     }
@@ -67,9 +84,19 @@ export function AdminPage({ onNavigate }: AdminPageProps) {
     
     try {
       await api.deleteEmployee(id);
-      loadEmployees();
+      loadData();
     } catch (error) {
       console.error("Error deleting employee:", error);
+    }
+  };
+
+  const handleUpdateTimesheet = async () => {
+    try {
+      await api.setCurrentTimesheet(timesheetData.startDate, timesheetData.endDate);
+      setIsTimesheetOpen(false);
+      loadData();
+    } catch (error) {
+      console.error("Error updating timesheet:", error);
     }
   };
 
@@ -83,6 +110,11 @@ export function AdminPage({ onNavigate }: AdminPageProps) {
     setIsEditOpen(true);
   };
 
+  const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  };
+
   return (
     <div className="flex flex-col h-screen">
       {/* Header */}
@@ -94,11 +126,31 @@ export function AdminPage({ onNavigate }: AdminPageProps) {
         
         <h1 className="text-2xl font-bold">Admin Panel</h1>
         
-        <Button onClick={() => setIsCreateOpen(true)}>
-          <Plus className="mr-2 h-4 w-4" />
-          Add Employee
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => setIsTimesheetOpen(true)}>
+            <CalendarDays className="mr-2 h-4 w-4" />
+            Set Period
+          </Button>
+          <Button onClick={() => setIsCreateOpen(true)}>
+            <Plus className="mr-2 h-4 w-4" />
+            Add Employee
+          </Button>
+        </div>
       </div>
+
+      {/* Timesheet Info */}
+      {currentTimesheet && (
+        <div className="px-6 pt-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Current Timesheet Period</CardTitle>
+              <CardDescription>
+                {formatDate(currentTimesheet.start_date)} - {formatDate(currentTimesheet.end_date)}
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </div>
+      )}
 
       {/* Main Content */}
       <div className="flex-1 overflow-auto p-6">
@@ -132,6 +184,44 @@ export function AdminPage({ onNavigate }: AdminPageProps) {
           ))}
         </div>
       </div>
+
+      {/* Set Timesheet Period Dialog */}
+      <Dialog open={isTimesheetOpen} onOpenChange={setIsTimesheetOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Set Timesheet Period</DialogTitle>
+            <DialogDescription>
+              Define the start and end dates for the current timesheet period.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="start-date">Start Date</Label>
+              <Input
+                id="start-date"
+                type="date"
+                value={timesheetData.startDate}
+                onChange={(e) => setTimesheetData({ ...timesheetData, startDate: e.target.value })}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="end-date">End Date</Label>
+              <Input
+                id="end-date"
+                type="date"
+                value={timesheetData.endDate}
+                onChange={(e) => setTimesheetData({ ...timesheetData, endDate: e.target.value })}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsTimesheetOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleUpdateTimesheet}>Update Period</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Create Employee Dialog */}
       <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>

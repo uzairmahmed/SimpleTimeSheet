@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { UserCard } from "@/components/UserCard";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Employee, CurrentTimesheet } from "@/types";
 import { api } from "@/services/api";
 import { Settings, Calendar } from "lucide-react";
@@ -12,6 +15,9 @@ interface HomePageProps {
 export function HomePage({ onNavigate }: HomePageProps) {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [currentTimesheet, setCurrentTimesheet] = useState<CurrentTimesheet | null>(null);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     loadData();
@@ -22,10 +28,38 @@ export function HomePage({ onNavigate }: HomePageProps) {
       const emps = await api.getEmployees();
       setEmployees(emps);
       
-      const ts = await api.getCurrentTimesheet();
+      let ts = await api.getCurrentTimesheet();
+      
+      // If no timesheet exists, create a default one
+      if (!ts) {
+        const startDate = new Date();
+        startDate.setDate(startDate.getDate() - startDate.getDay()); // Start of week
+        const endDate = new Date(startDate);
+        endDate.setDate(endDate.getDate() + 13); // 2 weeks
+        
+        await api.setCurrentTimesheet(
+          startDate.toISOString().split('T')[0],
+          endDate.toISOString().split('T')[0]
+        );
+        
+        ts = await api.getCurrentTimesheet();
+      }
+      
       setCurrentTimesheet(ts);
     } catch (error) {
       console.error("Error loading data:", error);
+    }
+  };
+
+  const handleAdminLogin = () => {
+    // Simple password check - in production, use proper authentication
+    if (password === "admin123") {
+      setIsAuthOpen(false);
+      setPassword("");
+      setError("");
+      onNavigate('admin');
+    } else {
+      setError("Incorrect password");
     }
   };
 
@@ -53,7 +87,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
         <div className="flex-1 flex justify-end">
           <Button
             variant="outline"
-            onClick={() => onNavigate('admin')}
+            onClick={() => setIsAuthOpen(true)}
           >
             <Settings className="mr-2 h-4 w-4" />
             Admin
@@ -63,15 +97,25 @@ export function HomePage({ onNavigate }: HomePageProps) {
 
       {/* Main Content */}
       <div className="flex-1 overflow-auto p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {employees.map((emp) => (
-            <UserCard
-              key={emp.id}
-              employee={emp}
-              onClick={() => onNavigate('employee', emp.id)}
-            />
-          ))}
-        </div>
+        {employees.length === 0 ? (
+          <div className="text-center p-12">
+            <p className="text-muted-foreground mb-4">No employees found. Please add employees from the Admin panel.</p>
+            <Button onClick={() => setIsAuthOpen(true)}>
+              <Settings className="mr-2 h-4 w-4" />
+              Go to Admin
+            </Button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {employees.map((emp) => (
+              <UserCard
+                key={emp.id}
+                employee={emp}
+                onClick={() => onNavigate('employee', emp.id)}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Footer */}
@@ -94,6 +138,45 @@ export function HomePage({ onNavigate }: HomePageProps) {
           </Button>
         </div>
       </div>
+
+      {/* Admin Login Dialog */}
+      <Dialog open={isAuthOpen} onOpenChange={setIsAuthOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Admin Login</DialogTitle>
+            <DialogDescription>
+              Enter the admin password to access the admin panel.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setError("");
+                }}
+                onKeyDown={(e) => e.key === 'Enter' && handleAdminLogin()}
+              />
+              {error && <p className="text-sm text-destructive">{error}</p>}
+              <p className="text-xs text-muted-foreground">Default password: admin123</p>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => {
+              setIsAuthOpen(false);
+              setPassword("");
+              setError("");
+            }}>
+              Cancel
+            </Button>
+            <Button onClick={handleAdminLogin}>Login</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
