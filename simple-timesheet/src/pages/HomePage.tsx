@@ -52,7 +52,9 @@ export function HomePage({ onNavigate }: HomePageProps) {
   };
 
   const handleAdminLogin = () => {
-    // Simple password check - in production, use proper authentication
+    // TODO: Replace with proper backend authentication
+    // This is a simple client-side check for demonstration purposes only
+    // In production, implement proper server-side authentication with secure password hashing
     if (password === "admin123") {
       setIsAuthOpen(false);
       setPassword("");

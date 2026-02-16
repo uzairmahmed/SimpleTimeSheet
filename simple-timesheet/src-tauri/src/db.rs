@@ -65,7 +65,6 @@ impl Database {
         let mut cursor = collection.find(doc! {}).await?;
         let mut employees = Vec::new();
         
-        use mongodb::bson::Document;
         use futures::stream::TryStreamExt;
         
         while let Some(employee) = cursor.try_next().await? {

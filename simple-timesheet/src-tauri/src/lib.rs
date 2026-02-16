@@ -2,6 +2,7 @@ mod db;
 mod commands;
 
 use std::sync::Arc;
+use std::env;
 use tokio::sync::Mutex;
 use db::Database;
 
@@ -20,8 +21,11 @@ pub fn run() {
       // Initialize database
       let app_handle = app.handle().clone();
       tauri::async_runtime::spawn(async move {
-        let connection_string = "mongodb://admin:admin123@localhost:27017";
-        match Database::new(connection_string).await {
+        // Get connection string from environment or use default for development
+        let connection_string = env::var("MONGODB_URI")
+          .unwrap_or_else(|_| "mongodb://admin:admin123@localhost:27017".to_string());
+        
+        match Database::new(&connection_string).await {
           Ok(database) => {
             let db_state = Arc::new(Mutex::new(database));
             app_handle.manage(db_state);

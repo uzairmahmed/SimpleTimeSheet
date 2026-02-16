@@ -166,15 +166,30 @@ simple-timesheet/
 
 ### Database Connection
 
-The MongoDB connection string is configured in `src-tauri/src/lib.rs`:
+The MongoDB connection string can be configured via environment variable:
 
-```rust
-let connection_string = "mongodb://admin:admin123@localhost:27017";
+```bash
+# Set the MONGODB_URI environment variable
+export MONGODB_URI="mongodb://admin:admin123@localhost:27017"
 ```
 
+If not set, it defaults to `mongodb://admin:admin123@localhost:27017` for development.
+
+**Production:** Always use environment variables for database credentials. Never commit credentials to source control.
+
 To use a different database:
-1. Update the connection string
+1. Set the `MONGODB_URI` environment variable
 2. Update docker-compose.yml with new credentials
+
+### Admin Authentication
+
+**⚠️ Security Note:** The current admin authentication is a simple client-side password check for demonstration purposes only. The default password is `admin123`.
+
+**For Production:** Implement proper server-side authentication:
+1. Create a Tauri command for authentication
+2. Use secure password hashing (e.g., bcrypt, argon2)
+3. Store hashed passwords in the database
+4. Implement session management or JWT tokens
 
 ## Migrating from Old System
 
