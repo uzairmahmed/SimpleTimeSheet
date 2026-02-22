@@ -15,16 +15,16 @@
 - [x] Build "Unauthorized" and "Loading" states using ShadCN components.
 
 ## Phase 3: Employee Features (Timesheet Entry)
-- [ ] Build Daily Entry Form:
+- [x] Build Daily Entry Form:
     - Inputs for Date, Start Time, End Time.
     - Logic: Validate End > Start.
     - Logic: Apply 30-min break rule if > 5.5 hours.
-- [ ] Build "Home" View:
+- [x] Build "Home" View:
     - View of all employees.
     - Click the employee name to view their timesheet after a login prompt is displayed.
     - Display admin links to the admin dashboard.
     - Display current timesheet period
-- [ ] Build "My Timesheet" View:
+- [x] Build "My Timesheet" View:
     - Bi-weekly breakdown of the current active period.
     - Edit functionality (disabled if period is locked).
     - History view for past periods.
