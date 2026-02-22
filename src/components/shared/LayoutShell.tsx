@@ -12,6 +12,7 @@ import {
   LogIn,
   LogOut,
   Menu,
+  CalendarClock,
   type LucideIcon,
 } from "lucide-react";
 import { useState } from "react";
@@ -27,6 +28,7 @@ const employeeLinks: NavLink[] = [
 const adminLinks: NavLink[] = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/employees", label: "Employees", icon: Users },
+  { href: "/admin/timesheet", label: "Timesheet & Payroll", icon: CalendarClock },
 ];
 
 export function LayoutShell({ children }: { children: React.ReactNode }) {

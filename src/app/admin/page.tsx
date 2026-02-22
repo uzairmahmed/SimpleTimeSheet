@@ -19,8 +19,7 @@ export default function AdminDashboardPage() {
         <CardHeader>
           <CardTitle>Quick links</CardTitle>
           <CardDescription>
-            Employee management and timesheet features will be available in
-            Phase 4 and 5.
+            Manage employees, view consolidated timesheets, and run payroll export.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -29,9 +28,14 @@ export default function AdminDashboardPage() {
               <a href="/admin/employees" className="text-primary hover:underline">
                 Employees
               </a>{" "}
-              (Phase 4)
+              — List, create, edit, delete; manage wages and roles
             </li>
-            <li>Timesheet &amp; Pay Period (Phase 5)</li>
+            <li>
+              <a href="/admin/timesheet" className="text-primary hover:underline">
+                Timesheet &amp; Payroll
+              </a>{" "}
+              — Consolidated view, pay period lock/unlock, CSV export
+            </li>
           </ul>
         </CardContent>
       </Card>

@@ -30,18 +30,18 @@
     - History view for past periods.
 
 ## Phase 4: Admin Features (Employee Management)
-- [ ] Employee CRUD Dashboard:
+- [x] Employee CRUD Dashboard:
     - List view with search.
     - Create/Edit/Delete modals (Manage wages and roles).
 
 ## Phase 5: Admin Features (Timesheet & Payroll)
-- [ ] Consolidated Timesheet View:
+- [x] Consolidated Timesheet View:
     - Filter by employee or period.
     - Manual adjustment override for admins.
-- [ ] Pay Period Management:
+- [x] Pay Period Management:
     - Auto-generation of Sun-Sat periods.
     - Manual lock/unlock toggle.
-- [ ] CSV Export:
+- [x] CSV Export:
     - Generate payroll report (Employee Name, Total Paid Hours, Wage, Total Pay).
 
 ## Phase 6: Polish & Security
