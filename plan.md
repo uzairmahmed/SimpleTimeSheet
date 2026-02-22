@@ -44,7 +44,23 @@
 - [x] CSV Export:
     - Generate payroll report (Employee Name, Total Paid Hours, Wage, Total Pay).
 
-## Phase 6: Polish & Security
+## Phase 6: Enhanced UX & Calendar Interface
+- [x] **Kiosk-style Login Grid:**
+    - Update the root route `/` to fetch all employees (public fields only: name, username).
+    - Display as a responsive grid of cards/blocks.
+    - Modal integration: Clicking a card opens a login dialog with the username prefilled.
+- [x] **2-Week Calendar View Component:**
+    - Create a 14-day grid mapping to the current Pay Period (Sun-Sat x2).
+    - Navigation: Implement "Next" and "Previous" period logic.
+    - Interaction: 
+        - Empty cells: Click to open 'Add Entry' modal for that date.
+        - Filled cells: Display duration/status; click to view/edit.
+- [x] **Admin Global Calendar:**
+    - Implementation of the same calendar component for Admin views.
+    - Filter by employee to see their specific 2-week spread.
+    - Consolidated view: A vertical list of employees, each having a mini-row version of the calendar.
+
+## Phase 7: Polish & Security
 - [ ] Add loading indicators to all server actions.
 - [ ] Ensure Middleware protects `/admin` routes.
 - [ ] Final UI/UX audit for responsiveness.

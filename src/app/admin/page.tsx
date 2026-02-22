@@ -36,6 +36,12 @@ export default function AdminDashboardPage() {
               </a>{" "}
               — Consolidated view, pay period lock/unlock, CSV export
             </li>
+            <li>
+              <a href="/admin/calendar" className="text-primary hover:underline">
+                Calendar
+              </a>{" "}
+              — 2-week view by employee or consolidated
+            </li>
           </ul>
         </CardContent>
       </Card>

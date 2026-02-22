@@ -50,6 +50,25 @@ export async function getConsolidatedEntries(employeeId?: string, periodId?: str
   return entries;
 }
 
+/** Entries for a date range (for admin calendar). Optional employeeId. */
+export async function getConsolidatedEntriesByRange(
+  start: Date,
+  end: Date,
+  employeeId?: string
+) {
+  if (!(await requireAdmin())) return [];
+  const where: { date: { gte: Date; lte: Date }; userId?: string } = {
+    date: { gte: start, lte: end },
+  };
+  if (employeeId) where.userId = employeeId;
+  const entries = await prisma.timesheetEntry.findMany({
+    where,
+    orderBy: [{ user: { name: "asc" } }, { date: "asc" }],
+    include: { user: { select: { id: true, name: true } }, payPeriod: true },
+  });
+  return entries;
+}
+
 const paidHoursSchema = z.coerce.number().min(0).max(24);
 
 /** Admin override: set paid hours for an entry. */

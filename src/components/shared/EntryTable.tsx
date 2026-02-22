@@ -39,10 +39,14 @@ export function EntryTable({
   entries,
   periodLocked,
   onUpdate,
+  initialEditEntryId,
+  onClearEditId,
 }: {
   entries: Entry[];
   periodLocked: boolean;
   onUpdate: () => void;
+  initialEditEntryId?: string | null;
+  onClearEditId?: () => void;
 }) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editDate, setEditDate] = useState("");
@@ -58,6 +62,17 @@ export function EntryTable({
     setEditEnd(entry.endTime);
     setError(null);
   }
+
+  React.useEffect(() => {
+    if (!initialEditEntryId) return;
+    const entry = entries.find((e) => e.id === initialEditEntryId);
+    if (entry) {
+      startEdit(entry);
+      onClearEditId?.();
+    }
+    // Only run when calendar asks to open a specific entry
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialEditEntryId]);
 
   async function handleUpdate(e: React.FormEvent) {
     e.preventDefault();

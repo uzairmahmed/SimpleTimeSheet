@@ -8,9 +8,10 @@ import {
   getPayPeriodHistory,
   getPayPeriodById,
 } from "@/app/actions/timesheet";
+import { getTwoWeekWindow } from "@/lib/pay-period";
 
 type Props = {
-  searchParams: { period?: string };
+  searchParams: { period?: string; window?: string };
 };
 
 export default async function TimesheetPage({ searchParams }: Props) {
@@ -23,12 +24,14 @@ export default async function TimesheetPage({ searchParams }: Props) {
   }
 
   const periodId = searchParams.period;
+  const windowParam = searchParams.window;
 
   const current = await getCurrentPayPeriod();
   const periodHistory = await getPayPeriodHistory();
 
   let entries: Awaited<ReturnType<typeof getMyEntriesForPeriod>>;
   let currentPeriod: { start: Date; end: Date; isLocked: boolean };
+  let windowStart: Date | null = null;
 
   if (periodId) {
     const period = await getPayPeriodById(periodId);
@@ -42,12 +45,22 @@ export default async function TimesheetPage({ searchParams }: Props) {
     };
     entries = await getMyEntriesForPeriod(period.startDate, period.endDate);
   } else {
+    const twoWeek = getTwoWeekWindow(new Date());
+    windowStart = windowParam
+      ? (() => {
+          const d = new Date(windowParam);
+          return isNaN(d.getTime()) ? twoWeek.start : d;
+        })()
+      : twoWeek.start;
+    const windowEnd = new Date(windowStart);
+    windowEnd.setDate(windowStart.getDate() + 13);
+    windowEnd.setHours(23, 59, 59, 999);
     currentPeriod = {
       start: current.start,
       end: current.end,
       isLocked: current.isLocked,
     };
-    entries = await getMyEntriesForPeriod(current.start, current.end);
+    entries = await getMyEntriesForPeriod(windowStart, windowEnd);
   }
 
   const isCurrentPeriod =
@@ -61,6 +74,7 @@ export default async function TimesheetPage({ searchParams }: Props) {
       currentPeriod={currentPeriod}
       periodHistory={periodHistory}
       showAddForm={isCurrentPeriod}
+      windowStart={windowStart}
     />
   );
 }
