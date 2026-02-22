@@ -19,6 +19,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { createEmployee, updateEmployee, deleteEmployee } from "@/app/actions/admin-employees";
+import { Spinner } from "@/components/ui/spinner";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 
 type EmployeeRow = {
@@ -195,7 +196,9 @@ export function EmployeeList({ employees, searchQuery }: { employees: EmployeeRo
               </div>
               <DialogFooter>
                 <Button type="button" variant="outline" onClick={() => setCreateOpen(false)}>Cancel</Button>
-                <Button type="submit" disabled={pending}>{pending ? "Creating…" : "Create"}</Button>
+                <Button type="submit" disabled={pending}>
+                  {pending ? <><Spinner className="mr-2 h-4 w-4" />Creating…</> : "Create"}
+                </Button>
               </DialogFooter>
             </form>
           </DialogContent>
@@ -239,7 +242,9 @@ export function EmployeeList({ employees, searchQuery }: { employees: EmployeeRo
               </div>
               <DialogFooter>
                 <Button type="button" variant="outline" onClick={() => setEditUser(null)}>Cancel</Button>
-                <Button type="submit" disabled={pending}>{pending ? "Saving…" : "Save"}</Button>
+                <Button type="submit" disabled={pending}>
+                  {pending ? <><Spinner className="mr-2 h-4 w-4" />Saving…</> : "Save"}
+                </Button>
               </DialogFooter>
             </form>
           </DialogContent>
@@ -261,7 +266,7 @@ export function EmployeeList({ employees, searchQuery }: { employees: EmployeeRo
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => setDeleteUser(null)}>Cancel</Button>
               <Button type="button" variant="destructive" onClick={handleDelete} disabled={pending}>
-                {pending ? "Deleting…" : "Delete"}
+                {pending ? <><Spinner className="mr-2 h-4 w-4" />Deleting…</> : "Delete"}
               </Button>
             </DialogFooter>
           </DialogContent>

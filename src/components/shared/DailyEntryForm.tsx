@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import { createTimesheetEntry } from "@/app/actions/timesheet";
 import { computeBreakAndPaidHours, timeToMinutes } from "@/lib/timesheet-utils";
+import { Spinner } from "@/components/ui/spinner";
 
 const today = () => new Date().toISOString().slice(0, 10);
 
@@ -131,7 +132,14 @@ export function DailyEntryForm({
             <p className="text-sm text-muted-foreground">{preview}</p>
           )}
           <Button type="submit" disabled={disabled || isPending}>
-            {isPending ? "Adding…" : "Add entry"}
+            {isPending ? (
+              <>
+                <Spinner className="mr-2 h-4 w-4" />
+                Adding…
+              </>
+            ) : (
+              "Add entry"
+            )}
           </Button>
         </form>
       </CardContent>

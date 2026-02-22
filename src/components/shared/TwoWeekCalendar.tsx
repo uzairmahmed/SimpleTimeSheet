@@ -71,8 +71,9 @@ export function TwoWeekCalendar({
           <ChevronRight className="h-5 w-5" />
         </button>
       </div>
-      <div className="grid grid-cols-7 gap-2">
-        {days.map((d) => {
+      <div className="overflow-x-auto">
+        <div className="grid grid-cols-7 gap-2 min-w-0">
+          {days.map((d) => {
           const dateStr = toDateOnly(d);
           const dayEntries = entriesByDate.get(dateStr) ?? [];
           const totalPaid = dayEntries.reduce((s, e) => s + paidNum(e.paidHours), 0);
@@ -82,7 +83,7 @@ export function TwoWeekCalendar({
           return (
             <div
               key={dateStr}
-              className={`min-w-[80px] rounded-lg border p-2 text-center text-sm ${
+              className={`min-w-[72px] sm:min-w-[80px] rounded-lg border p-2 text-center text-sm ${
                 isToday ? "border-primary bg-primary/5" : "border-border bg-card"
               }`}
             >
@@ -97,7 +98,7 @@ export function TwoWeekCalendar({
                 <button
                   type="button"
                   onClick={() => onAddDate(dateStr)}
-                  className="mt-1 w-full rounded bg-muted py-1 text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                  className="mt-1 w-full min-h-[44px] rounded bg-muted py-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                 >
                   + Add
                 </button>
@@ -105,7 +106,7 @@ export function TwoWeekCalendar({
                 <button
                   type="button"
                   onClick={() => onEditEntry(dayEntries[0])}
-                  className="mt-1 w-full rounded py-1 font-medium text-primary hover:bg-accent"
+                  className="mt-1 w-full min-h-[44px] rounded py-2 font-medium text-primary hover:bg-accent"
                 >
                   {totalPaid} h
                   {dayEntries.length > 1 ? ` (${dayEntries.length})` : ""}
@@ -114,6 +115,7 @@ export function TwoWeekCalendar({
             </div>
           );
         })}
+        </div>
       </div>
     </div>
   );

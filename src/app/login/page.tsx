@@ -14,6 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function LoginPage() {
   const searchParams = useSearchParams();
@@ -102,7 +103,7 @@ export default function LoginPage() {
           </CardContent>
           <CardFooter className="flex flex-col gap-2">
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Signing in…" : "Sign in"}
+              {loading ? <><Spinner className="mr-2 h-4 w-4" />Signing in…</> : "Sign in"}
             </Button>
             <Link href="/" className="text-sm text-muted-foreground hover:underline">
               Back to home

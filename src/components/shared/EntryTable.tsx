@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { updateTimesheetEntry, deleteTimesheetEntry } from "@/app/actions/timesheet";
 import { computeBreakAndPaidHours, timeToMinutes } from "@/lib/timesheet-utils";
+import { Spinner } from "@/components/ui/spinner";
 import { Pencil, Trash2 } from "lucide-react";
 
 type Entry = {
@@ -214,7 +215,7 @@ export function EntryTable({
                                 <span className="text-muted-foreground text-xs">{preview}</span>
                               )}
                               <Button type="submit" size="sm" disabled={pending}>
-                                {pending ? "Saving…" : "Save"}
+                                {pending ? <><Spinner className="mr-1.5 h-3.5 w-3.5" />Saving…</> : "Save"}
                               </Button>
                               <Button
                                 type="button"

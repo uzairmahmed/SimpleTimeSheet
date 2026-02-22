@@ -15,6 +15,7 @@ export default withAuth({
   },
 });
 
+// Protect /admin and /admin/* (admin only), /timesheet and /timesheet/* (authenticated)
 export const config = {
-  matcher: ["/admin/:path*", "/timesheet/:path*"],
+  matcher: ["/admin", "/admin/:path*", "/timesheet", "/timesheet/:path*"],
 };

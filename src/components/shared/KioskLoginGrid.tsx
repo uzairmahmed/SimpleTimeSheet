@@ -12,6 +12,7 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
+import { Spinner } from "@/components/ui/spinner";
 import { LayoutDashboard } from "lucide-react";
 
 type Employee = { id: string; name: string; username: string };
@@ -129,7 +130,7 @@ export function KioskLoginGrid({
                   Cancel
                 </Button>
                 <Button type="submit" disabled={loading || !password}>
-                  {loading ? "Signing in…" : "Sign in"}
+                  {loading ? <><Spinner className="mr-2 h-4 w-4" />Signing in…</> : "Sign in"}
                 </Button>
               </DialogFooter>
             </form>

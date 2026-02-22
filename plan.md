@@ -61,6 +61,6 @@
     - Consolidated view: A vertical list of employees, each having a mini-row version of the calendar.
 
 ## Phase 7: Polish & Security
-- [ ] Add loading indicators to all server actions.
-- [ ] Ensure Middleware protects `/admin` routes.
-- [ ] Final UI/UX audit for responsiveness.
+- [x] Add loading indicators to all server actions.
+- [x] Ensure Middleware protects `/admin` routes.
+- [x] Final UI/UX audit for responsiveness.

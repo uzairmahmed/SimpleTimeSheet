@@ -17,6 +17,7 @@ import {
   getPayrollReport,
   ensurePayPeriodsGenerated,
 } from "@/app/actions/admin-timesheet";
+import { Spinner } from "@/components/ui/spinner";
 import { formatPayPeriodLabel } from "@/lib/pay-period";
 
 type EmployeeOpt = { id: string; name: string };
@@ -52,6 +53,8 @@ export function AdminTimesheetView({
   const router = useRouter();
   const [generating, setGenerating] = useState(false);
   const [exporting, setExporting] = useState(false);
+  const [lockingPeriodId, setLockingPeriodId] = useState<string | null>(null);
+  const [savingPaidId, setSavingPaidId] = useState<string | null>(null);
   const [editingPaid, setEditingPaid] = useState<string | null>(null);
   const [paidValue, setPaidValue] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -67,7 +70,9 @@ export function AdminTimesheetView({
 
   async function handleLock(periodId: string, isLocked: boolean) {
     setError(null);
+    setLockingPeriodId(periodId);
     const res = await setPayPeriodLock(periodId, isLocked);
+    setLockingPeriodId(null);
     if (res.success) router.refresh();
     else setError(res.error);
   }
@@ -79,7 +84,9 @@ export function AdminTimesheetView({
       return;
     }
     setError(null);
+    setSavingPaidId(entryId);
     const res = await updateEntryPaidHoursAdmin(entryId, n);
+    setSavingPaidId(null);
     if (res.success) {
       setEditingPaid(null);
       router.refresh();
@@ -169,7 +176,7 @@ export function AdminTimesheetView({
               <CardDescription>Generate Sun–Sat periods and lock/unlock for payroll.</CardDescription>
             </div>
             <Button onClick={handleGeneratePeriods} disabled={generating}>
-              {generating ? "Generating…" : "Generate next 12 weeks"}
+              {generating ? <><Spinner className="mr-2 h-4 w-4" />Generating…</> : "Generate next 12 weeks"}
             </Button>
           </div>
         </CardHeader>
@@ -189,8 +196,9 @@ export function AdminTimesheetView({
                     variant={p.isLocked ? "default" : "outline"}
                     size="sm"
                     onClick={() => handleLock(p.id, !p.isLocked)}
+                    disabled={lockingPeriodId !== null}
                   >
-                    {p.isLocked ? "Unlock" : "Lock"}
+                    {lockingPeriodId === p.id ? "…" : p.isLocked ? "Unlock" : "Lock"}
                   </Button>
                 </li>
               ))}
@@ -208,7 +216,7 @@ export function AdminTimesheetView({
               <CardDescription>Click paid hours to override (admin).</CardDescription>
             </div>
             <Button onClick={handleExportCsv} disabled={exporting || periods.length === 0}>
-              {exporting ? "Exporting…" : "Export CSV"}
+              {exporting ? <><Spinner className="mr-2 h-4 w-4" />Exporting…</> : "Export CSV"}
             </Button>
           </div>
         </CardHeader>
@@ -254,8 +262,12 @@ export function AdminTimesheetView({
                               onChange={(e) => setPaidValue(e.target.value)}
                               autoFocus
                             />
-                            <Button size="sm" onClick={() => handleSavePaidHours(entry.id)}>
-                              Save
+                            <Button
+                              size="sm"
+                              onClick={() => handleSavePaidHours(entry.id)}
+                              disabled={savingPaidId !== null}
+                            >
+                              {savingPaidId === entry.id ? "Saving…" : "Save"}
                             </Button>
                             <Button size="sm" variant="ghost" onClick={() => setEditingPaid(null)}>
                               Cancel

@@ -26,7 +26,7 @@ function DialogContent({
   return (
     <div
       className={cn(
-        "fixed left-[50%] top-[50%] z-50 w-full max-w-lg translate-x-[-50%] translate-y-[-50%] rounded-lg border bg-background p-6 shadow-lg",
+        "fixed left-[50%] top-[50%] z-50 w-[calc(100%-2rem)] max-w-lg max-h-[90vh] translate-x-[-50%] translate-y-[-50%] rounded-lg border bg-background p-6 shadow-lg overflow-y-auto",
         className
       )}
       onClick={(e) => e.stopPropagation()}
