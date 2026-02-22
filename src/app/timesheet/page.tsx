@@ -7,6 +7,7 @@ import {
   getMyEntriesForPeriod,
   getPayPeriodHistory,
   getPayPeriodById,
+  getLockedDatesInRange,
 } from "@/app/actions/timesheet";
 import { getTwoWeekWindow } from "@/lib/pay-period";
 
@@ -32,6 +33,7 @@ export default async function TimesheetPage({ searchParams }: Props) {
   let entries: Awaited<ReturnType<typeof getMyEntriesForPeriod>>;
   let currentPeriod: { start: Date; end: Date; isLocked: boolean };
   let windowStart: Date | null = null;
+  let lockedDateStrings: string[] = [];
 
   if (periodId) {
     const period = await getPayPeriodById(periodId);
@@ -60,7 +62,12 @@ export default async function TimesheetPage({ searchParams }: Props) {
       end: current.end,
       isLocked: current.isLocked,
     };
-    entries = await getMyEntriesForPeriod(windowStart, windowEnd);
+    const [entriesRes, lockedRes] = await Promise.all([
+      getMyEntriesForPeriod(windowStart, windowEnd),
+      getLockedDatesInRange(windowStart, windowEnd),
+    ]);
+    entries = entriesRes;
+    lockedDateStrings = lockedRes;
   }
 
   const isCurrentPeriod =
@@ -75,6 +82,8 @@ export default async function TimesheetPage({ searchParams }: Props) {
       periodHistory={periodHistory}
       showAddForm={isCurrentPeriod}
       windowStart={windowStart}
+      periodId={periodId ?? null}
+      lockedDateStrings={lockedDateStrings}
     />
   );
 }

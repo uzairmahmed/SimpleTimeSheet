@@ -216,3 +216,34 @@ export async function getPayPeriodById(periodId: string) {
   });
   return period;
 }
+
+/** Returns date strings (YYYY-MM-DD) in the range that fall in a locked pay period. */
+export async function getLockedDatesInRange(start: Date, end: Date): Promise<string[]> {
+  const session = await getSession();
+  if (!session) return [];
+
+  const periodLockCache = new Map<string, boolean>();
+  const locked: string[] = [];
+  const cursor = new Date(start);
+  cursor.setHours(0, 0, 0, 0);
+  const endTime = new Date(end).getTime();
+
+  while (cursor.getTime() <= endTime) {
+    const dateStr = cursor.toISOString().slice(0, 10);
+    const { start: periodStart, end: periodEnd } = getPayPeriodBoundsForDate(cursor);
+    const cacheKey = `${periodStart.toISOString().slice(0, 10)}`;
+    let isLocked = periodLockCache.get(cacheKey);
+    if (isLocked === undefined) {
+      const period = await prisma.payPeriod.findUnique({
+        where: {
+          startDate_endDate: { startDate: periodStart, endDate: periodEnd },
+        },
+      });
+      isLocked = period?.isLocked ?? false;
+      periodLockCache.set(cacheKey, isLocked);
+    }
+    if (isLocked) locked.push(dateStr);
+    cursor.setDate(cursor.getDate() + 1);
+  }
+  return locked;
+}
