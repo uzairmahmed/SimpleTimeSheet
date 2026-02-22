@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Employee, CurrentTimesheet } from "@/types";
+import type { Employee, CurrentTimesheet } from "@/types";
 import { api } from "@/services/api";
 import { ArrowLeft, Plus, Edit, Trash2, CalendarDays } from "lucide-react";
 

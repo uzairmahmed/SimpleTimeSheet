@@ -1,3 +1,4 @@
+use futures::stream::TryStreamExt;
 use mongodb::{Client, Collection, bson::doc};
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;

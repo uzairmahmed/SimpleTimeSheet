@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Employee } from "@/types";
+import type { Employee } from "@/types/index";
+// import type { Employee } from '../types/index';
 
 interface UserCardProps {
   employee: Employee;

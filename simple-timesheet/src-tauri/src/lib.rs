@@ -1,6 +1,7 @@
 mod db;
 mod commands;
 
+use tauri::Manager;
 use std::sync::Arc;
 use std::env;
 use tokio::sync::Mutex;

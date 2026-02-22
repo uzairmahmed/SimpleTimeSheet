@@ -1,5 +1,5 @@
 import { invoke } from '@tauri-apps/api/core';
-import { Employee, TimesheetEntry, CurrentTimesheet } from '@/types';
+import type { Employee, TimesheetEntry, CurrentTimesheet } from '@/types';
 
 export const api = {
   // Employee operations

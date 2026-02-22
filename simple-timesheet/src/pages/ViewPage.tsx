@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { TimesheetEntry, CurrentTimesheet } from "@/types";
+import type { TimesheetEntry, CurrentTimesheet } from "@/types";
 import { api } from "@/services/api";
 import { ArrowLeft } from "lucide-react";
 
