@@ -1,0 +1,27 @@
+{
+  "project_context": "Clinic Timesheet Management System for tracking staff hours and payroll.",
+  "tech_stack": [
+    "Next.js 14 (App Router)",
+    "TypeScript",
+    "Tailwind CSS",
+    "ShadCN UI",
+    "Prisma ORM",
+    "PostgreSQL (Docker-based)"
+  ],
+  "accounting_rules": {
+    "break_logic": "If worked_hours > 5.5, subtract 30 mins (0.5h) for unpaid break. Otherwise, break = 0.",
+    "pay_period_structure": "Starts Sunday 00:00, Ends Saturday 23:59. Lock by default at Saturday 11:59 PM.",
+    "calculation_formula": "Total Pay = (Sum of daily paid hours) * wageRate",
+    "time_rounding": "Round to the nearest 15 minutes.",
+    "date_format": "YYYY-MM-DD",
+    "time_format": "HH:MM"
+  },
+  "coding_guidelines": [
+    "Use Server Actions for database mutations.",
+    "Maintain strict TypeScript types; avoid 'any'.",
+    "Organize components into /components/ui (ShadCN) and /components/shared.",
+    "Use Zod for all form validation, especially time comparisons.",
+    "Ensure database queries are optimized and handled via Prisma clients."
+  ],
+  "instructions": "When generating code for timesheet entries, always include the break-time calculation logic server-side to ensure integrity. When creating Admin views, verify role-based access control (RBAC)."
+}

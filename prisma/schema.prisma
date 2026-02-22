@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  EMPLOYEE
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  username     String   @unique
+  passwordHash String
+  role         Role
+  wageRate     Decimal  @db.Decimal(10, 2) @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  timesheetEntries TimesheetEntry[]
+}
+
+model TimesheetEntry {
+  id            String   @id @default(cuid())
+  userId        String
+  date          DateTime @db.Date
+  startTime     String   // HH:MM
+  endTime       String   // HH:MM
+  breakMinutes  Int      @default(0)
+  paidHours     Decimal  @db.Decimal(5, 2)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  payPeriodId String?
+  payPeriod    PayPeriod? @relation(fields: [payPeriodId], references: [id], onDelete: SetNull)
+
+  @@index([userId, date])
+  @@index([payPeriodId])
+}
+
+model PayPeriod {
+  id        String   @id @default(cuid())
+  startDate DateTime @db.Date
+  endDate   DateTime @db.Date
+  isLocked  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  timesheetEntries TimesheetEntry[]
+
+  @@unique([startDate, endDate])
+  @@index([startDate, endDate])
+}
