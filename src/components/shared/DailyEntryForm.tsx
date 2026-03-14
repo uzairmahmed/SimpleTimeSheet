@@ -83,6 +83,7 @@ export function DailyEntryForm({
       {error && (
         <p className="text-sm text-destructive">{error}</p>
       )}
+      {embedded && <input type="hidden" name="date" value={date} />}
       <div className={embedded ? "space-y-4" : "grid gap-4 sm:grid-cols-3"}>
         <div className="space-y-2">
           <label htmlFor="entry-date" className="text-sm font-medium">
@@ -90,7 +91,7 @@ export function DailyEntryForm({
           </label>
           <Input
             id="entry-date"
-            name="date"
+            name={embedded ? undefined : "date"}
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
