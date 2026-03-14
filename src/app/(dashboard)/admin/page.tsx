@@ -47,7 +47,7 @@ export default async function AdminDashboardPage() {
       description: "View and adjust entries for any employee.",
       stat: entryCount,
       statLabel: `entr${entryCount !== 1 ? "ies" : "y"}`,
-      ready: false,
+      ready: true,
     },
     {
       href: "/admin/pay-periods",
@@ -56,7 +56,7 @@ export default async function AdminDashboardPage() {
       description: "Lock and manage payroll periods.",
       stat: periodCount,
       statLabel: `period${periodCount !== 1 ? "s" : ""}`,
-      ready: false,
+      ready: true,
     },
   ];
 
