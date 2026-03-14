@@ -1,0 +1,53 @@
+// Clinic Timesheet Management System – Prisma Schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  EMPLOYEE
+}
+
+model User {
+  id           String           @id @default(cuid())
+  name         String
+  username     String           @unique
+  passwordHash String
+  role         Role             @default(EMPLOYEE)
+  wageRate     Decimal          @default(0) @db.Decimal(10, 2)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  entries      TimesheetEntry[]
+}
+
+model TimesheetEntry {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date         String   // YYYY-MM-DD
+  startTime    String   // HH:mm (24h)
+  endTime      String   // HH:mm (24h)
+  breakMinutes Int      @default(0)
+  paidHours    Decimal  @db.Decimal(5, 2)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([userId, date])
+}
+
+model PayPeriod {
+  id        String   @id @default(cuid())
+  startDate String   // YYYY-MM-DD (Sunday)
+  endDate   String   // YYYY-MM-DD (Saturday)
+  isLocked  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([startDate, endDate])
+}
