@@ -11,4 +11,5 @@
 export type * from './models/User'
 export type * from './models/TimesheetEntry'
 export type * from './models/PayPeriod'
+export type * from './models/AdjustmentLog'
 export type * from './commonInputTypes'

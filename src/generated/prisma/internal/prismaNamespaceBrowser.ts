@@ -53,7 +53,8 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   TimesheetEntry: 'TimesheetEntry',
-  PayPeriod: 'PayPeriod'
+  PayPeriod: 'PayPeriod',
+  AdjustmentLog: 'AdjustmentLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -113,6 +114,23 @@ export const PayPeriodScalarFieldEnum = {
 export type PayPeriodScalarFieldEnum = (typeof PayPeriodScalarFieldEnum)[keyof typeof PayPeriodScalarFieldEnum]
 
 
+export const AdjustmentLogScalarFieldEnum = {
+  id: 'id',
+  entryId: 'entryId',
+  adminId: 'adminId',
+  notes: 'notes',
+  changedAt: 'changedAt',
+  oldStartTime: 'oldStartTime',
+  newStartTime: 'newStartTime',
+  oldEndTime: 'oldEndTime',
+  newEndTime: 'newEndTime',
+  oldPaidHours: 'oldPaidHours',
+  newPaidHours: 'newPaidHours'
+} as const
+
+export type AdjustmentLogScalarFieldEnum = (typeof AdjustmentLogScalarFieldEnum)[keyof typeof AdjustmentLogScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -127,4 +145,12 @@ export const QueryMode = {
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 

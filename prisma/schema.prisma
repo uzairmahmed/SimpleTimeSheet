@@ -24,30 +24,48 @@ model User {
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
   entries      TimesheetEntry[]
+  adjustments  AdjustmentLog[]
 }
 
 model TimesheetEntry {
-  id           String   @id @default(cuid())
+  id           String          @id @default(cuid())
   userId       String
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  date         String   // YYYY-MM-DD
-  startTime    String   // HH:mm (24h)
-  endTime      String   // HH:mm (24h)
-  breakMinutes Int      @default(0)
-  paidHours    Decimal  @db.Decimal(5, 2)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  user         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date         String          // YYYY-MM-DD
+  startTime    String          // HH:mm (24h)
+  endTime      String          // HH:mm (24h)
+  breakMinutes Int             @default(0)
+  paidHours    Decimal         @db.Decimal(5, 2)
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  adjustments  AdjustmentLog[]
 
   @@unique([userId, date])
 }
 
 model PayPeriod {
   id        String   @id @default(cuid())
-  startDate String   // YYYY-MM-DD (Sunday)
-  endDate   String   // YYYY-MM-DD (Saturday)
+  startDate String   // YYYY-MM-DD
+  endDate   String   // YYYY-MM-DD
   isLocked  Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@unique([startDate, endDate])
+}
+
+model AdjustmentLog {
+  id           String         @id @default(cuid())
+  entryId      String
+  adminId      String
+  notes        String?
+  changedAt    DateTime       @default(now())
+  oldStartTime String
+  newStartTime String
+  oldEndTime   String
+  newEndTime   String
+  oldPaidHours Decimal        @db.Decimal(5, 2)
+  newPaidHours Decimal        @db.Decimal(5, 2)
+  entry        TimesheetEntry @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  admin        User           @relation(fields: [adminId], references: [id])
 }

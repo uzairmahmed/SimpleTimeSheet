@@ -4,13 +4,12 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import {
   getPayPeriodRange,
-  formatPeriodLabel,
 } from "@/lib/timesheetCalc";
 import { Lock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { TimesheetTable } from "./_components/TimesheetTable";
 import { EntryFormDialog } from "./_components/EntryFormDialog";
-import { PeriodSelector } from "./_components/PeriodSelector";
+import { PeriodNav } from "./_components/PeriodNav";
+import { TimesheetTabs } from "./_components/TimesheetTabs";
 
 type SearchParams = { period?: string };
 
@@ -26,6 +25,7 @@ export default async function TimesheetPage({
 
   // ─── Determine active period ──────────────────────────────────────────────
   const today = new Date();
+  const todayStr = today.toISOString().slice(0, 10);
   const currentRange = getPayPeriodRange(today);
 
   const periodStart = searchParams.period ?? currentRange.start;
@@ -62,7 +62,7 @@ export default async function TimesheetPage({
   const isLocked = payPeriod?.isLocked ?? false;
   const wageRate = Number(user?.wageRate ?? 0);
 
-  // ─── Build period selector list ───────────────────────────────────────────
+  // ─── Build period navigation list ─────────────────────────────────────────
   const periodSet = new Map<string, string>();
   // Always include current period
   periodSet.set(currentRange.start, currentRange.end);
@@ -71,6 +71,9 @@ export default async function TimesheetPage({
     const r = getPayPeriodRange(new Date(date + "T12:00:00"));
     periodSet.set(r.start, r.end);
   }
+  // Always include the currently viewed period
+  periodSet.set(periodStart, periodEnd);
+
   const periods = Array.from(periodSet.entries())
     .map(([start, end]) => ({ start, end }))
     .sort((a, b) => b.start.localeCompare(a.start));
@@ -86,11 +89,10 @@ export default async function TimesheetPage({
     0
   );
 
-  const periodLabel = formatPeriodLabel(periodStart, periodEnd);
   const isCurrentPeriod = periodStart === currentRange.start;
 
   return (
-    <div className="space-y-6 max-w-3xl">
+    <div className="space-y-4 max-w-3xl">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold">My Timesheet</h1>
@@ -99,9 +101,9 @@ export default async function TimesheetPage({
         </p>
       </div>
 
-      {/* Period selector + status + add button */}
+      {/* Period navigation + status + add button */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-        <PeriodSelector periods={periods} currentStart={periodStart} />
+        <PeriodNav periods={periods} currentStart={periodStart} />
         <div className="flex items-center gap-2">
           {isLocked && (
             <Badge variant="destructive" className="gap-1">
@@ -120,18 +122,16 @@ export default async function TimesheetPage({
         </div>
       </div>
 
-      {/* Table */}
-      <TimesheetTable
+      {/* Tabs: Calendar + List */}
+      <TimesheetTabs
         entries={serializedEntries}
+        periodStart={periodStart}
+        periodEnd={periodEnd}
         isLocked={isLocked}
+        today={todayStr}
         totalPaidHours={totalPaidHours}
         wageRate={wageRate}
       />
-
-      {/* Period summary label */}
-      <p className="text-xs text-muted-foreground">
-        Period: {periodLabel}
-      </p>
     </div>
   );
 }

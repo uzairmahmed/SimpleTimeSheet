@@ -56,3 +56,8 @@ export type TimesheetEntry = Prisma.TimesheetEntryModel
  * 
  */
 export type PayPeriod = Prisma.PayPeriodModel
+/**
+ * Model AdjustmentLog
+ * 
+ */
+export type AdjustmentLog = Prisma.AdjustmentLogModel

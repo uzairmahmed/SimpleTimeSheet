@@ -386,7 +386,8 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   User: 'User',
   TimesheetEntry: 'TimesheetEntry',
-  PayPeriod: 'PayPeriod'
+  PayPeriod: 'PayPeriod',
+  AdjustmentLog: 'AdjustmentLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -402,7 +403,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "timesheetEntry" | "payPeriod"
+    modelProps: "user" | "timesheetEntry" | "payPeriod" | "adjustmentLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -628,6 +629,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    AdjustmentLog: {
+      payload: Prisma.$AdjustmentLogPayload<ExtArgs>
+      fields: Prisma.AdjustmentLogFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AdjustmentLogFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdjustmentLogPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AdjustmentLogFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdjustmentLogPayload>
+        }
+        findFirst: {
+          args: Prisma.AdjustmentLogFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdjustmentLogPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AdjustmentLogFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdjustmentLogPayload>
+        }
+        findMany: {
+          args: Prisma.AdjustmentLogFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdjustmentLogPayload>[]
+        }
+        create: {
+          args: Prisma.AdjustmentLogCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdjustmentLogPayload>
+        }
+        createMany: {
+          args: Prisma.AdjustmentLogCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AdjustmentLogCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdjustmentLogPayload>[]
+        }
+        delete: {
+          args: Prisma.AdjustmentLogDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdjustmentLogPayload>
+        }
+        update: {
+          args: Prisma.AdjustmentLogUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdjustmentLogPayload>
+        }
+        deleteMany: {
+          args: Prisma.AdjustmentLogDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AdjustmentLogUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AdjustmentLogUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdjustmentLogPayload>[]
+        }
+        upsert: {
+          args: Prisma.AdjustmentLogUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdjustmentLogPayload>
+        }
+        aggregate: {
+          args: Prisma.AdjustmentLogAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAdjustmentLog>
+        }
+        groupBy: {
+          args: Prisma.AdjustmentLogGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AdjustmentLogGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AdjustmentLogCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AdjustmentLogCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -708,6 +783,23 @@ export const PayPeriodScalarFieldEnum = {
 export type PayPeriodScalarFieldEnum = (typeof PayPeriodScalarFieldEnum)[keyof typeof PayPeriodScalarFieldEnum]
 
 
+export const AdjustmentLogScalarFieldEnum = {
+  id: 'id',
+  entryId: 'entryId',
+  adminId: 'adminId',
+  notes: 'notes',
+  changedAt: 'changedAt',
+  oldStartTime: 'oldStartTime',
+  newStartTime: 'newStartTime',
+  oldEndTime: 'oldEndTime',
+  newEndTime: 'newEndTime',
+  oldPaidHours: 'oldPaidHours',
+  newPaidHours: 'newPaidHours'
+} as const
+
+export type AdjustmentLogScalarFieldEnum = (typeof AdjustmentLogScalarFieldEnum)[keyof typeof AdjustmentLogScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -722,6 +814,14 @@ export const QueryMode = {
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
 
@@ -918,6 +1018,7 @@ export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   timesheetEntry?: Prisma.TimesheetEntryOmit
   payPeriod?: Prisma.PayPeriodOmit
+  adjustmentLog?: Prisma.AdjustmentLogOmit
 }
 
 /* Types for Logging */

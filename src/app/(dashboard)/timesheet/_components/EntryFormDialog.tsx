@@ -42,7 +42,12 @@ type Props = {
   mode: "add" | "edit";
   entryId?: string;
   defaultValues?: FormValues;
-  currentPeriodStart?: string; // prefill date to today within the period
+  currentPeriodStart?: string;
+  /** Controlled mode — used by CalendarView */
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  /** When set, the date field is displayed as text and locked */
+  fixedDate?: string;
 };
 
 export function EntryFormDialog({
@@ -50,20 +55,30 @@ export function EntryFormDialog({
   entryId,
   defaultValues,
   currentPeriodStart,
+  open: controlledOpen,
+  onOpenChange: controlledOnOpenChange,
+  fixedDate,
 }: Props) {
-  const [open, setOpen] = useState(false);
+  const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
   const [pending, startTransition] = useTransition();
+
+  const isControlled = controlledOpen !== undefined;
+  const open = isControlled ? controlledOpen : uncontrolledOpen;
+  const setOpen = isControlled ? controlledOnOpenChange! : setUncontrolledOpen;
 
   const today = new Date().toISOString().slice(0, 10);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: defaultValues ?? {
-      date: today,
+      date: fixedDate ?? today,
       startTime: "",
       endTime: "",
     },
   });
+
+  // Sync form date when fixedDate changes (different calendar cell opened)
+  const currentFixedDate = fixedDate;
 
   function onSubmit(values: FormValues) {
     startTransition(async () => {
@@ -75,22 +90,98 @@ export function EntryFormDialog({
       if (result.success) {
         toast.success(result.message);
         setOpen(false);
-        form.reset({
-          date: today,
-          startTime: "",
-          endTime: "",
-        });
+        form.reset({ date: fixedDate ?? today, startTime: "", endTime: "" });
       } else {
         toast.error(result.message);
         if (result.errors) {
           for (const [field, messages] of Object.entries(result.errors)) {
-            form.setError(field as keyof FormValues, {
-              message: messages[0],
-            });
+            form.setError(field as keyof FormValues, { message: messages[0] });
           }
         }
       }
     });
+  }
+
+  const dialogContent = (
+    <DialogContent className="sm:max-w-sm">
+      <DialogHeader>
+        <DialogTitle>
+          {mode === "add" ? "Log Hours" : "Edit Entry"}
+          {fixedDate && (
+            <span className="ml-2 text-base font-normal text-muted-foreground">
+              — {new Date(fixedDate + "T12:00:00").toLocaleDateString("en-CA", {
+                weekday: "short",
+                month: "short",
+                day: "numeric",
+              })}
+            </span>
+          )}
+        </DialogTitle>
+      </DialogHeader>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          {!fixedDate && (
+            <FormField
+              control={form.control}
+              name="date"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Date</FormLabel>
+                  <FormControl>
+                    <Input type="date" disabled={pending} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+          {/* Hidden date field when fixedDate is set */}
+          {fixedDate && (
+            <input type="hidden" {...form.register("date")} value={fixedDate} />
+          )}
+          <div className="grid grid-cols-2 gap-3">
+            <FormField
+              control={form.control}
+              name="startTime"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Start</FormLabel>
+                  <FormControl>
+                    <Input type="time" disabled={pending} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="endTime"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>End</FormLabel>
+                  <FormControl>
+                    <Input type="time" disabled={pending} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <Button type="submit" className="w-full" disabled={pending}>
+            {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {mode === "add" ? "Save Entry" : "Save Changes"}
+          </Button>
+        </form>
+      </Form>
+    </DialogContent>
+  );
+
+  if (isControlled) {
+    return (
+      <Dialog open={open} onOpenChange={setOpen}>
+        {dialogContent}
+      </Dialog>
+    );
   }
 
   return (
@@ -108,62 +199,7 @@ export function EntryFormDialog({
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-sm">
-        <DialogHeader>
-          <DialogTitle>
-            {mode === "add" ? "Add Timesheet Entry" : "Edit Entry"}
-          </DialogTitle>
-        </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="date"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Date</FormLabel>
-                  <FormControl>
-                    <Input type="date" disabled={pending} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div className="grid grid-cols-2 gap-3">
-              <FormField
-                control={form.control}
-                name="startTime"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Start</FormLabel>
-                    <FormControl>
-                      <Input type="time" disabled={pending} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="endTime"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>End</FormLabel>
-                    <FormControl>
-                      <Input type="time" disabled={pending} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <Button type="submit" className="w-full" disabled={pending}>
-              {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {mode === "add" ? "Add Entry" : "Save Changes"}
-            </Button>
-          </form>
-        </Form>
-      </DialogContent>
+      {dialogContent}
     </Dialog>
   );
 }

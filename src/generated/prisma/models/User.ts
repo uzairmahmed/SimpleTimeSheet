@@ -241,6 +241,7 @@ export type UserWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   entries?: Prisma.TimesheetEntryListRelationFilter
+  adjustments?: Prisma.AdjustmentLogListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -253,6 +254,7 @@ export type UserOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   entries?: Prisma.TimesheetEntryOrderByRelationAggregateInput
+  adjustments?: Prisma.AdjustmentLogOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -268,6 +270,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   entries?: Prisma.TimesheetEntryListRelationFilter
+  adjustments?: Prisma.AdjustmentLogListRelationFilter
 }, "id" | "username">
 
 export type UserOrderByWithAggregationInput = {
@@ -310,6 +313,7 @@ export type UserCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   entries?: Prisma.TimesheetEntryCreateNestedManyWithoutUserInput
+  adjustments?: Prisma.AdjustmentLogCreateNestedManyWithoutAdminInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -322,6 +326,7 @@ export type UserUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   entries?: Prisma.TimesheetEntryUncheckedCreateNestedManyWithoutUserInput
+  adjustments?: Prisma.AdjustmentLogUncheckedCreateNestedManyWithoutAdminInput
 }
 
 export type UserUpdateInput = {
@@ -334,6 +339,7 @@ export type UserUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   entries?: Prisma.TimesheetEntryUpdateManyWithoutUserNestedInput
+  adjustments?: Prisma.AdjustmentLogUpdateManyWithoutAdminNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -346,6 +352,7 @@ export type UserUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   entries?: Prisma.TimesheetEntryUncheckedUpdateManyWithoutUserNestedInput
+  adjustments?: Prisma.AdjustmentLogUncheckedUpdateManyWithoutAdminNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -461,6 +468,20 @@ export type UserUpdateOneRequiredWithoutEntriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEntriesInput, Prisma.UserUpdateWithoutEntriesInput>, Prisma.UserUncheckedUpdateWithoutEntriesInput>
 }
 
+export type UserCreateNestedOneWithoutAdjustmentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAdjustmentsInput, Prisma.UserUncheckedCreateWithoutAdjustmentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAdjustmentsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutAdjustmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAdjustmentsInput, Prisma.UserUncheckedCreateWithoutAdjustmentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAdjustmentsInput
+  upsert?: Prisma.UserUpsertWithoutAdjustmentsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAdjustmentsInput, Prisma.UserUpdateWithoutAdjustmentsInput>, Prisma.UserUncheckedUpdateWithoutAdjustmentsInput>
+}
+
 export type UserCreateWithoutEntriesInput = {
   id?: string
   name: string
@@ -470,6 +491,7 @@ export type UserCreateWithoutEntriesInput = {
   wageRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  adjustments?: Prisma.AdjustmentLogCreateNestedManyWithoutAdminInput
 }
 
 export type UserUncheckedCreateWithoutEntriesInput = {
@@ -481,6 +503,7 @@ export type UserUncheckedCreateWithoutEntriesInput = {
   wageRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  adjustments?: Prisma.AdjustmentLogUncheckedCreateNestedManyWithoutAdminInput
 }
 
 export type UserCreateOrConnectWithoutEntriesInput = {
@@ -508,6 +531,7 @@ export type UserUpdateWithoutEntriesInput = {
   wageRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adjustments?: Prisma.AdjustmentLogUpdateManyWithoutAdminNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEntriesInput = {
@@ -519,6 +543,71 @@ export type UserUncheckedUpdateWithoutEntriesInput = {
   wageRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adjustments?: Prisma.AdjustmentLogUncheckedUpdateManyWithoutAdminNestedInput
+}
+
+export type UserCreateWithoutAdjustmentsInput = {
+  id?: string
+  name: string
+  username: string
+  passwordHash: string
+  role?: $Enums.Role
+  wageRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  entries?: Prisma.TimesheetEntryCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutAdjustmentsInput = {
+  id?: string
+  name: string
+  username: string
+  passwordHash: string
+  role?: $Enums.Role
+  wageRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  entries?: Prisma.TimesheetEntryUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutAdjustmentsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAdjustmentsInput, Prisma.UserUncheckedCreateWithoutAdjustmentsInput>
+}
+
+export type UserUpsertWithoutAdjustmentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAdjustmentsInput, Prisma.UserUncheckedUpdateWithoutAdjustmentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAdjustmentsInput, Prisma.UserUncheckedCreateWithoutAdjustmentsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAdjustmentsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAdjustmentsInput, Prisma.UserUncheckedUpdateWithoutAdjustmentsInput>
+}
+
+export type UserUpdateWithoutAdjustmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  wageRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  entries?: Prisma.TimesheetEntryUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAdjustmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  wageRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  entries?: Prisma.TimesheetEntryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -528,10 +617,12 @@ export type UserUncheckedUpdateWithoutEntriesInput = {
 
 export type UserCountOutputType = {
   entries: number
+  adjustments: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   entries?: boolean | UserCountOutputTypeCountEntriesArgs
+  adjustments?: boolean | UserCountOutputTypeCountAdjustmentsArgs
 }
 
 /**
@@ -551,6 +642,13 @@ export type UserCountOutputTypeCountEntriesArgs<ExtArgs extends runtime.Types.Ex
   where?: Prisma.TimesheetEntryWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAdjustmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AdjustmentLogWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -562,6 +660,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdAt?: boolean
   updatedAt?: boolean
   entries?: boolean | Prisma.User$entriesArgs<ExtArgs>
+  adjustments?: boolean | Prisma.User$adjustmentsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -601,6 +700,7 @@ export type UserSelectScalar = {
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "username" | "passwordHash" | "role" | "wageRate" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   entries?: boolean | Prisma.User$entriesArgs<ExtArgs>
+  adjustments?: boolean | Prisma.User$adjustmentsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -610,6 +710,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "User"
   objects: {
     entries: Prisma.$TimesheetEntryPayload<ExtArgs>[]
+    adjustments: Prisma.$AdjustmentLogPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1015,6 +1116,7 @@ readonly fields: UserFieldRefs;
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   entries<T extends Prisma.User$entriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$entriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TimesheetEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  adjustments<T extends Prisma.User$adjustmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$adjustmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AdjustmentLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1466,6 +1568,30 @@ export type User$entriesArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.TimesheetEntryScalarFieldEnum | Prisma.TimesheetEntryScalarFieldEnum[]
+}
+
+/**
+ * User.adjustments
+ */
+export type User$adjustmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AdjustmentLog
+   */
+  select?: Prisma.AdjustmentLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AdjustmentLog
+   */
+  omit?: Prisma.AdjustmentLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AdjustmentLogInclude<ExtArgs> | null
+  where?: Prisma.AdjustmentLogWhereInput
+  orderBy?: Prisma.AdjustmentLogOrderByWithRelationInput | Prisma.AdjustmentLogOrderByWithRelationInput[]
+  cursor?: Prisma.AdjustmentLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AdjustmentLogScalarFieldEnum | Prisma.AdjustmentLogScalarFieldEnum[]
 }
 
 /**

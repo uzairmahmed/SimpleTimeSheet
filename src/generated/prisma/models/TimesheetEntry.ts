@@ -253,6 +253,7 @@ export type TimesheetEntryWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"TimesheetEntry"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TimesheetEntry"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  adjustments?: Prisma.AdjustmentLogListRelationFilter
 }
 
 export type TimesheetEntryOrderByWithRelationInput = {
@@ -266,6 +267,7 @@ export type TimesheetEntryOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
+  adjustments?: Prisma.AdjustmentLogOrderByRelationAggregateInput
 }
 
 export type TimesheetEntryWhereUniqueInput = Prisma.AtLeast<{
@@ -283,6 +285,7 @@ export type TimesheetEntryWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"TimesheetEntry"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TimesheetEntry"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  adjustments?: Prisma.AdjustmentLogListRelationFilter
 }, "id" | "userId_date">
 
 export type TimesheetEntryOrderByWithAggregationInput = {
@@ -327,6 +330,7 @@ export type TimesheetEntryCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutEntriesInput
+  adjustments?: Prisma.AdjustmentLogCreateNestedManyWithoutEntryInput
 }
 
 export type TimesheetEntryUncheckedCreateInput = {
@@ -339,6 +343,7 @@ export type TimesheetEntryUncheckedCreateInput = {
   paidHours: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  adjustments?: Prisma.AdjustmentLogUncheckedCreateNestedManyWithoutEntryInput
 }
 
 export type TimesheetEntryUpdateInput = {
@@ -351,6 +356,7 @@ export type TimesheetEntryUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutEntriesNestedInput
+  adjustments?: Prisma.AdjustmentLogUpdateManyWithoutEntryNestedInput
 }
 
 export type TimesheetEntryUncheckedUpdateInput = {
@@ -363,6 +369,7 @@ export type TimesheetEntryUncheckedUpdateInput = {
   paidHours?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adjustments?: Prisma.AdjustmentLogUncheckedUpdateManyWithoutEntryNestedInput
 }
 
 export type TimesheetEntryCreateManyInput = {
@@ -461,6 +468,11 @@ export type TimesheetEntrySumOrderByAggregateInput = {
   paidHours?: Prisma.SortOrder
 }
 
+export type TimesheetEntryScalarRelationFilter = {
+  is?: Prisma.TimesheetEntryWhereInput
+  isNot?: Prisma.TimesheetEntryWhereInput
+}
+
 export type TimesheetEntryCreateNestedManyWithoutUserInput = {
   create?: Prisma.XOR<Prisma.TimesheetEntryCreateWithoutUserInput, Prisma.TimesheetEntryUncheckedCreateWithoutUserInput> | Prisma.TimesheetEntryCreateWithoutUserInput[] | Prisma.TimesheetEntryUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.TimesheetEntryCreateOrConnectWithoutUserInput | Prisma.TimesheetEntryCreateOrConnectWithoutUserInput[]
@@ -511,6 +523,20 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type TimesheetEntryCreateNestedOneWithoutAdjustmentsInput = {
+  create?: Prisma.XOR<Prisma.TimesheetEntryCreateWithoutAdjustmentsInput, Prisma.TimesheetEntryUncheckedCreateWithoutAdjustmentsInput>
+  connectOrCreate?: Prisma.TimesheetEntryCreateOrConnectWithoutAdjustmentsInput
+  connect?: Prisma.TimesheetEntryWhereUniqueInput
+}
+
+export type TimesheetEntryUpdateOneRequiredWithoutAdjustmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.TimesheetEntryCreateWithoutAdjustmentsInput, Prisma.TimesheetEntryUncheckedCreateWithoutAdjustmentsInput>
+  connectOrCreate?: Prisma.TimesheetEntryCreateOrConnectWithoutAdjustmentsInput
+  upsert?: Prisma.TimesheetEntryUpsertWithoutAdjustmentsInput
+  connect?: Prisma.TimesheetEntryWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TimesheetEntryUpdateToOneWithWhereWithoutAdjustmentsInput, Prisma.TimesheetEntryUpdateWithoutAdjustmentsInput>, Prisma.TimesheetEntryUncheckedUpdateWithoutAdjustmentsInput>
+}
+
 export type TimesheetEntryCreateWithoutUserInput = {
   id?: string
   date: string
@@ -520,6 +546,7 @@ export type TimesheetEntryCreateWithoutUserInput = {
   paidHours: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  adjustments?: Prisma.AdjustmentLogCreateNestedManyWithoutEntryInput
 }
 
 export type TimesheetEntryUncheckedCreateWithoutUserInput = {
@@ -531,6 +558,7 @@ export type TimesheetEntryUncheckedCreateWithoutUserInput = {
   paidHours: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  adjustments?: Prisma.AdjustmentLogUncheckedCreateNestedManyWithoutEntryInput
 }
 
 export type TimesheetEntryCreateOrConnectWithoutUserInput = {
@@ -574,6 +602,70 @@ export type TimesheetEntryScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"TimesheetEntry"> | Date | string
 }
 
+export type TimesheetEntryCreateWithoutAdjustmentsInput = {
+  id?: string
+  date: string
+  startTime: string
+  endTime: string
+  breakMinutes?: number
+  paidHours: runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutEntriesInput
+}
+
+export type TimesheetEntryUncheckedCreateWithoutAdjustmentsInput = {
+  id?: string
+  userId: string
+  date: string
+  startTime: string
+  endTime: string
+  breakMinutes?: number
+  paidHours: runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type TimesheetEntryCreateOrConnectWithoutAdjustmentsInput = {
+  where: Prisma.TimesheetEntryWhereUniqueInput
+  create: Prisma.XOR<Prisma.TimesheetEntryCreateWithoutAdjustmentsInput, Prisma.TimesheetEntryUncheckedCreateWithoutAdjustmentsInput>
+}
+
+export type TimesheetEntryUpsertWithoutAdjustmentsInput = {
+  update: Prisma.XOR<Prisma.TimesheetEntryUpdateWithoutAdjustmentsInput, Prisma.TimesheetEntryUncheckedUpdateWithoutAdjustmentsInput>
+  create: Prisma.XOR<Prisma.TimesheetEntryCreateWithoutAdjustmentsInput, Prisma.TimesheetEntryUncheckedCreateWithoutAdjustmentsInput>
+  where?: Prisma.TimesheetEntryWhereInput
+}
+
+export type TimesheetEntryUpdateToOneWithWhereWithoutAdjustmentsInput = {
+  where?: Prisma.TimesheetEntryWhereInput
+  data: Prisma.XOR<Prisma.TimesheetEntryUpdateWithoutAdjustmentsInput, Prisma.TimesheetEntryUncheckedUpdateWithoutAdjustmentsInput>
+}
+
+export type TimesheetEntryUpdateWithoutAdjustmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.StringFieldUpdateOperationsInput | string
+  startTime?: Prisma.StringFieldUpdateOperationsInput | string
+  endTime?: Prisma.StringFieldUpdateOperationsInput | string
+  breakMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  paidHours?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutEntriesNestedInput
+}
+
+export type TimesheetEntryUncheckedUpdateWithoutAdjustmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.StringFieldUpdateOperationsInput | string
+  startTime?: Prisma.StringFieldUpdateOperationsInput | string
+  endTime?: Prisma.StringFieldUpdateOperationsInput | string
+  breakMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  paidHours?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type TimesheetEntryCreateManyUserInput = {
   id?: string
   date: string
@@ -594,6 +686,7 @@ export type TimesheetEntryUpdateWithoutUserInput = {
   paidHours?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adjustments?: Prisma.AdjustmentLogUpdateManyWithoutEntryNestedInput
 }
 
 export type TimesheetEntryUncheckedUpdateWithoutUserInput = {
@@ -605,6 +698,7 @@ export type TimesheetEntryUncheckedUpdateWithoutUserInput = {
   paidHours?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adjustments?: Prisma.AdjustmentLogUncheckedUpdateManyWithoutEntryNestedInput
 }
 
 export type TimesheetEntryUncheckedUpdateManyWithoutUserInput = {
@@ -619,6 +713,35 @@ export type TimesheetEntryUncheckedUpdateManyWithoutUserInput = {
 }
 
 
+/**
+ * Count Type TimesheetEntryCountOutputType
+ */
+
+export type TimesheetEntryCountOutputType = {
+  adjustments: number
+}
+
+export type TimesheetEntryCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  adjustments?: boolean | TimesheetEntryCountOutputTypeCountAdjustmentsArgs
+}
+
+/**
+ * TimesheetEntryCountOutputType without action
+ */
+export type TimesheetEntryCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TimesheetEntryCountOutputType
+   */
+  select?: Prisma.TimesheetEntryCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * TimesheetEntryCountOutputType without action
+ */
+export type TimesheetEntryCountOutputTypeCountAdjustmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AdjustmentLogWhereInput
+}
+
 
 export type TimesheetEntrySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -631,6 +754,8 @@ export type TimesheetEntrySelect<ExtArgs extends runtime.Types.Extensions.Intern
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  adjustments?: boolean | Prisma.TimesheetEntry$adjustmentsArgs<ExtArgs>
+  _count?: boolean | Prisma.TimesheetEntryCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["timesheetEntry"]>
 
 export type TimesheetEntrySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -674,6 +799,8 @@ export type TimesheetEntrySelectScalar = {
 export type TimesheetEntryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "date" | "startTime" | "endTime" | "breakMinutes" | "paidHours" | "createdAt" | "updatedAt", ExtArgs["result"]["timesheetEntry"]>
 export type TimesheetEntryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  adjustments?: boolean | Prisma.TimesheetEntry$adjustmentsArgs<ExtArgs>
+  _count?: boolean | Prisma.TimesheetEntryCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TimesheetEntryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -686,6 +813,7 @@ export type $TimesheetEntryPayload<ExtArgs extends runtime.Types.Extensions.Inte
   name: "TimesheetEntry"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
+    adjustments: Prisma.$AdjustmentLogPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1092,6 +1220,7 @@ readonly fields: TimesheetEntryFieldRefs;
 export interface Prisma__TimesheetEntryClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  adjustments<T extends Prisma.TimesheetEntry$adjustmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TimesheetEntry$adjustmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AdjustmentLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1528,6 +1657,30 @@ export type TimesheetEntryDeleteManyArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many TimesheetEntries to delete.
    */
   limit?: number
+}
+
+/**
+ * TimesheetEntry.adjustments
+ */
+export type TimesheetEntry$adjustmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AdjustmentLog
+   */
+  select?: Prisma.AdjustmentLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AdjustmentLog
+   */
+  omit?: Prisma.AdjustmentLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AdjustmentLogInclude<ExtArgs> | null
+  where?: Prisma.AdjustmentLogWhereInput
+  orderBy?: Prisma.AdjustmentLogOrderByWithRelationInput | Prisma.AdjustmentLogOrderByWithRelationInput[]
+  cursor?: Prisma.AdjustmentLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AdjustmentLogScalarFieldEnum | Prisma.AdjustmentLogScalarFieldEnum[]
 }
 
 /**

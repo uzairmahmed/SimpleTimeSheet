@@ -2,9 +2,9 @@
 
 import { revalidatePath } from "next/cache";
 import { getServerSession } from "next-auth";
+import { z } from "zod";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { getPayPeriodRange } from "@/lib/timesheetCalc";
 import type { ActionResponse } from "@/lib/types";
 
 async function requireAdmin() {
@@ -31,18 +31,50 @@ export async function togglePeriodLock(id: string): Promise<ActionResponse> {
   };
 }
 
-/** Ensure a PayPeriod record exists for the week containing today. */
-export async function ensureCurrentPeriod(): Promise<ActionResponse> {
+const createSchema = z
+  .object({
+    startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date"),
+    endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date"),
+  })
+  .refine((d) => d.endDate > d.startDate, {
+    message: "End date must be after start date",
+    path: ["endDate"],
+  });
+
+export async function createPayPeriod(
+  raw: unknown
+): Promise<ActionResponse> {
   await requireAdmin();
 
-  const { start, end } = getPayPeriodRange(new Date());
+  const parsed = createSchema.safeParse(raw);
+  if (!parsed.success) {
+    return {
+      success: false,
+      message: "Validation failed.",
+      errors: parsed.error.flatten().fieldErrors as Record<string, string[]>,
+    };
+  }
 
-  await prisma.payPeriod.upsert({
-    where: { startDate_endDate: { startDate: start, endDate: end } },
-    update: {},
-    create: { startDate: start, endDate: end, isLocked: false },
+  const { startDate, endDate } = parsed.data;
+
+  // Check for overlap with existing periods
+  const overlap = await prisma.payPeriod.findFirst({
+    where: {
+      startDate: { lte: endDate },
+      endDate: { gte: startDate },
+    },
+  });
+  if (overlap) {
+    return {
+      success: false,
+      message: `Dates overlap with an existing period (${overlap.startDate} – ${overlap.endDate}).`,
+    };
+  }
+
+  await prisma.payPeriod.create({
+    data: { startDate, endDate, isLocked: false },
   });
 
   revalidatePath("/admin/pay-periods");
-  return { success: true, message: "Current period ensured." };
+  return { success: true, message: "Pay period created." };
 }
