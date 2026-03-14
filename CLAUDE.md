@@ -6,7 +6,7 @@ A specialized payroll and attendance tracking platform designed for medical clin
 ## ⚖️ Accounting & Logic Rules (STRICT)
 - **Break Logic**: If `worked_hours > 5.5`, subtract 30 mins (0.5h) for unpaid break. If ≤ 5.5, break = 0.
 - **Pay Period**: Starts Sunday 00:00, Ends Saturday 23:59. 
-- **Locking**: Auto-lock periods every Saturday at 11:59 PM. (Prevents retroactive editing).
+- **Locking**: Manual lock/unlock only — admins explicitly lock a pay period. No auto-locking.
 - **Rounding**: Nearest 15-minute increment (0.25h).
 - **Formulas**: `Total Pay = (Sum of daily paid hours) * wageRate`.
 - **Formats**: Date: `YYYY-MM-DD`, Time: `HH:mm` (24h).
