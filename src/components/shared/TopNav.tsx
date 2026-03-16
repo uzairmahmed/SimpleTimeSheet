@@ -9,6 +9,12 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const adminLinks = [
   { href: "/admin", label: "Dashboard" },
@@ -110,16 +116,22 @@ export function TopNav() {
         <span className="text-sm text-muted-foreground hidden sm:block truncate max-w-[140px]">
           {session?.user?.name}
         </span>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8"
-          title="Sign out"
-          onClick={() => signOut({ callbackUrl: "/" })}
-        >
-          <LogOut className="h-4 w-4" />
-          <span className="sr-only">Sign out</span>
-        </Button>
+        <TooltipProvider delayDuration={300}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                onClick={() => signOut({ callbackUrl: "/" })}
+              >
+                <LogOut className="h-4 w-4" />
+                <span className="sr-only">Sign out</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Sign out</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
     </header>
   );

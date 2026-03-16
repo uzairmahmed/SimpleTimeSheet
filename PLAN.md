@@ -71,11 +71,11 @@
 - [X] Remove the need for separate login page. Just have the login form as a modal that appears.
 
 ## Phase 9: Prettyfying & UX Improvements
-- [ ] Main page elements should be centered and use the full width of the page more effectively, reducing excessive whitespace.
-- [ ] Ensure all buttons and interactive elements have clear hover and active states.
-- [ ] Add tooltips or helper text where necessary for better user guidance.
-- [ ] Use icons and visual cues to enhance usability (e.g., lock icons for locked periods, edit icons for editable entries).
-- [ ] Use the following colors throughout the app for brand consistency:
+- [X] Main page elements should be centered and use the full width of the page more effectively, reducing excessive whitespace.
+- [X] Ensure all buttons and interactive elements have clear hover and active states.
+- [X] Add tooltips or helper text where necessary for better user guidance.
+- [X] Use icons and visual cues to enhance usability (e.g., lock icons for locked periods, edit icons for editable entries).
+- [X] Use the following colors throughout the app for brand consistency:
     - Primary: #143d75 (blue)
     - Secondary: #3f9a91 (teal)
     - Accent: #b2a289 (tan)
@@ -83,7 +83,7 @@
     - Text: #143d75 (dark blue)
 
 ## Phase 10: Polish & Security
-- [ ] Add loading indicators to all server actions.
-- [ ] Consistent use of colors, fonts, and spacing across all components.
-- [ ] Ensure Middleware protects `/admin` routes.
-- [ ] Final UI/UX audit for responsiveness.
+- [X] Add loading indicators to all server actions.
+- [X] Consistent use of colors, fonts, and spacing across all components.
+- [X] Ensure Middleware protects `/admin` routes.
+- [X] Final UI/UX audit for responsiveness.

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Lock } from "lucide-react";
+import { Lock, Pencil, Plus } from "lucide-react";
 import { EntryFormDialog } from "./EntryFormDialog";
 import { DeleteEntryButton } from "./DeleteEntryButton";
 import { formatHours } from "@/lib/timesheetCalc";
@@ -127,7 +127,7 @@ export function CalendarView({ entries, periodStart, periodEnd, isLocked, today 
 
               {/* Entry info */}
               {entry ? (
-                <div className="flex flex-col gap-0.5 flex-1">
+                <div className="flex flex-col gap-0.5 flex-1 relative">
                   <span className="text-[11px] leading-tight font-medium">
                     {entry.startTime} – {entry.endTime}
                   </span>
@@ -135,13 +135,21 @@ export function CalendarView({ entries, periodStart, periodEnd, isLocked, today 
                     {formatHours(entry.paidHours)}
                   </span>
                   {canEdit && (
-                    <div className="mt-auto" onClick={(e) => e.stopPropagation()}>
-                      <DeleteEntryButton id={entry.id} />
-                    </div>
+                    <>
+                      {/* Pencil hint on hover */}
+                      <Pencil className="absolute top-0 right-0 h-3 w-3 text-muted-foreground/40 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <div className="mt-auto" onClick={(e) => e.stopPropagation()}>
+                        <DeleteEntryButton id={entry.id} />
+                      </div>
+                    </>
                   )}
                   {isLocked && (
                     <Lock className="h-3 w-3 text-muted-foreground/50 mt-auto" />
                   )}
+                </div>
+              ) : canAdd ? (
+                <div className="flex-1 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Plus className="h-4 w-4 text-muted-foreground/40" />
                 </div>
               ) : null}
             </div>

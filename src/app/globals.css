@@ -4,25 +4,42 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
+    /* Brand palette
+       Primary   #143d75  →  215 71% 27%
+       Secondary #3f9a91  →  174 42% 43%
+       Accent    #b2a289  →  37  21% 62%
+       BG        #f5f4ed  →  53  29% 95%
+       Text      #143d75  →  215 71% 27%
+    */
+
+    --background:         53  29% 95%;   /* #f5f4ed warm off-white */
+    --foreground:        215  71% 27%;   /* #143d75 dark blue */
+
+    --card:                0   0% 100%;  /* pure white */
+    --card-foreground:   215  71% 27%;
+
+    --popover:             0   0% 100%;
+    --popover-foreground:215  71% 27%;
+
+    --primary:           215  71% 27%;   /* #143d75 */
+    --primary-foreground:  0   0% 98%;   /* near-white on primary */
+
+    --secondary:         174  42% 43%;   /* #3f9a91 teal */
+    --secondary-foreground: 0  0% 100%; /* white on teal */
+
+    --muted:              53  15% 90%;   /* warm light gray */
+    --muted-foreground:  215  25% 50%;   /* medium blue-gray */
+
+    --accent:             37  21% 62%;   /* #b2a289 tan */
+    --accent-foreground: 215  71% 27%;   /* dark blue on tan */
+
+    --destructive:         0  72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border:            215  20% 84%;   /* subtle blue-tinted border */
+    --input:             215  20% 84%;
+    --ring:              215  71% 27%;
+
     --radius: 0.5rem;
   }
 }

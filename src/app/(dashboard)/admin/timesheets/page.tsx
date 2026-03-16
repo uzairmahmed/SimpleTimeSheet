@@ -68,7 +68,7 @@ export default async function AdminTimesheetsPage({
   const totalPaidHours = entries.reduce((sum, e) => sum + e.paidHours, 0);
 
   return (
-    <div className="space-y-4 max-w-5xl">
+    <div className="space-y-4 max-w-6xl">
       <div>
         <h1 className="text-2xl font-bold">Timesheets</h1>
         <p className="text-muted-foreground text-sm mt-0.5">

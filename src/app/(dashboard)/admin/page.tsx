@@ -103,7 +103,7 @@ export default async function AdminDashboardPage() {
   ];
 
   return (
-    <div className="space-y-5 max-w-4xl">
+    <div className="space-y-5 max-w-6xl">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold">Dashboard</h1>

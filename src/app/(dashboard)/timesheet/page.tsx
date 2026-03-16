@@ -68,7 +68,7 @@ export default async function TimesheetPage({
   }));
 
   return (
-    <div className="space-y-4 max-w-3xl">
+    <div className="space-y-4 max-w-6xl">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold">My Timesheet</h1>
