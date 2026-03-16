@@ -87,14 +87,14 @@ export function AdminTableView({ entries, isLocked, totalPaidHours }: Props) {
 
   return (
     <div className="rounded-md border overflow-x-auto">
-      <Table>
+      <Table className="text-base">
         <TableHeader>
           {/* Row 1: Employee name headers spanning their columns */}
           <TableRow>
-            <TableHead rowSpan={2} className="w-[60px] align-middle border-r">
+            <TableHead rowSpan={2} className="w-[60px] align-middle border-r sticky left-0 bg-background z-20">
               Day
             </TableHead>
-            <TableHead rowSpan={2} className="w-[100px] align-middle border-r">
+            <TableHead rowSpan={2} className="w-[100px] align-middle border-r sticky left-[60px] bg-background z-20">
               Date
             </TableHead>
             {empNames.map((name, i) => (
@@ -114,12 +114,12 @@ export function AdminTableView({ entries, isLocked, totalPaidHours }: Props) {
           <TableRow>
             {empNames.map((name, i) => (
               <React.Fragment key={name}>
-                <TableHead className="text-xs font-medium">Start</TableHead>
-                <TableHead className="text-xs font-medium">End</TableHead>
-                <TableHead className="text-xs font-medium text-center">Break</TableHead>
+                <TableHead className="font-medium">Start</TableHead>
+                <TableHead className="font-medium">End</TableHead>
+                <TableHead className="font-medium text-center">Break</TableHead>
                 <TableHead
                   className={[
-                    "text-xs font-medium text-right",
+                    "font-medium text-right",
                     i < empNames.length - 1 ? "border-r" : "",
                   ].join(" ")}
                 >
@@ -134,35 +134,35 @@ export function AdminTableView({ entries, isLocked, totalPaidHours }: Props) {
           {allDates.map((date) => {
             const dayEntries = index.get(date)!;
             return (
-              <TableRow key={date}>
-                <TableCell className="text-muted-foreground text-sm border-r">
+              <TableRow key={date} className="h-16">
+                <TableCell className="text-muted-foreground border-r sticky left-0 bg-background z-10">
                   {dayLabel(date)}
                 </TableCell>
-                <TableCell className="text-sm border-r">{date}</TableCell>
+                <TableCell className="border-r sticky left-[60px] bg-background z-10">{date}</TableCell>
                 {empNames.map((name, i) => {
                   const e = dayEntries.get(name);
                   return (
                     <React.Fragment key={name}>
-                      <TableCell className="text-sm">
+                      <TableCell>
                         {e ? fmtTime(e.startTime) : <span className="text-muted-foreground">—</span>}
                       </TableCell>
-                      <TableCell className="text-sm">
+                      <TableCell>
                         {e ? fmtTime(e.endTime) : <span className="text-muted-foreground">—</span>}
                       </TableCell>
                       <TableCell className="text-center">
                         {e ? (
                           e.breakMinutes > 0 ? (
-                            <Badge variant="secondary" className="text-xs">30 min</Badge>
+                            <Badge variant="secondary">30 min</Badge>
                           ) : (
-                            <span className="text-muted-foreground text-xs">—</span>
+                            <span className="text-muted-foreground">—</span>
                           )
                         ) : (
-                          <span className="text-muted-foreground text-xs">—</span>
+                          <span className="text-muted-foreground">—</span>
                         )}
                       </TableCell>
                       <TableCell
                         className={[
-                          "text-right font-mono text-sm",
+                          "text-right font-mono font-semibold",
                           i < empNames.length - 1 ? "border-r" : "",
                         ].join(" ")}
                       >
@@ -178,7 +178,7 @@ export function AdminTableView({ entries, isLocked, totalPaidHours }: Props) {
 
         <TableFooter>
           <TableRow>
-            <TableCell colSpan={2} className="text-right font-medium border-r">
+            <TableCell colSpan={2} className="text-right font-medium border-r sticky left-0 bg-muted/50 z-10">
               Total
             </TableCell>
             {empNames.map((name, i) => (

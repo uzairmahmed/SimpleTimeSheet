@@ -38,7 +38,7 @@ export function TopNav() {
   const isActive = useActive();
 
   return (
-    <header className="h-14 border-b bg-background sticky top-0 z-40 flex items-center px-4 gap-3">
+    <header className="h-16 border-b bg-background sticky top-0 z-40 flex items-center px-6 gap-3">
       {/* Mobile hamburger (admin only) */}
       {isAdmin && (
         <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>

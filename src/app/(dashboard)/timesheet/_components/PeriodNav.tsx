@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ChevronLeft, ChevronRight, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -16,6 +16,7 @@ type Props = {
 
 export function PeriodNav({ periods, currentStart, isLocked }: Props) {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const idx = periods.findIndex((p) => p.start === currentStart);
   const current = periods[idx];
@@ -25,7 +26,9 @@ export function PeriodNav({ periods, currentStart, isLocked }: Props) {
   const olderPeriod = idx < periods.length - 1 ? periods[idx + 1] : null;
 
   function navigate(start: string) {
-    router.push(`?period=${start}`);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("period", start);
+    router.replace(`?${params.toString()}`);
   }
 
   return (

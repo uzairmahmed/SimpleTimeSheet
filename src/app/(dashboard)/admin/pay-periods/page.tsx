@@ -51,7 +51,7 @@ export default async function PayPeriodsPage() {
   )?.id;
 
   return (
-    <div className="space-y-4 max-w-6xl">
+    <div className="space-y-8 max-w-6xl mx-auto">
       <div className="flex items-start justify-between">
         <div>
           <h1 className="text-2xl font-bold">Pay Periods</h1>

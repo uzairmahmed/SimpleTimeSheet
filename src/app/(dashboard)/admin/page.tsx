@@ -103,7 +103,7 @@ export default async function AdminDashboardPage() {
   ];
 
   return (
-    <div className="space-y-5 max-w-6xl">
+    <div className="space-y-8 max-w-6xl mx-auto">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold">Dashboard</h1>
@@ -119,7 +119,7 @@ export default async function AdminDashboardPage() {
       </div>
 
       {/* Navigation cards */}
-      <div className="grid gap-3 sm:grid-cols-3">
+      <div className="grid gap-5 sm:grid-cols-3">
         {sections.map(({ href, icon: Icon, title, description, stat, statLabel }) => (
           <Link
             key={href}

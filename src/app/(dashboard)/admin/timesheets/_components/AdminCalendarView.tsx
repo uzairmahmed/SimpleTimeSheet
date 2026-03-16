@@ -49,7 +49,7 @@ export function AdminCalendarView({ entries, periodStart, periodEnd, isLocked, t
   return (
     <>
       {isLocked && (
-        <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-2 p-2 bg-muted/40 rounded-md border">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3 p-3 bg-muted/40 rounded-md border">
           <Lock className="h-3 w-3 shrink-0" />
           This period is locked. Use the amber adjust button to make changes (all adjustments are logged).
         </div>
@@ -60,7 +60,7 @@ export function AdminCalendarView({ entries, periodStart, periodEnd, isLocked, t
         {DAY_LABELS.map((label) => (
           <div
             key={label}
-            className="bg-muted/50 text-center text-xs font-medium text-muted-foreground py-1.5"
+            className="bg-muted/50 text-center text-sm font-medium text-muted-foreground py-3"
           >
             {label}
           </div>
@@ -76,14 +76,14 @@ export function AdminCalendarView({ entries, periodStart, periodEnd, isLocked, t
             <div
               key={date}
               className={[
-                "bg-background min-h-[80px] p-1.5 flex flex-col gap-1",
+                "bg-background min-h-[130px] p-2.5 flex flex-col gap-2",
                 isLocked ? "opacity-75" : "",
               ].join(" ")}
             >
               {/* Date number */}
               <span
                 className={[
-                  "text-xs font-semibold w-5 h-5 flex items-center justify-center rounded-full shrink-0",
+                  "text-sm font-semibold w-7 h-7 flex items-center justify-center rounded-full shrink-0",
                   isToday ? "bg-primary text-primary-foreground" : "text-muted-foreground",
                 ].join(" ")}
               >
@@ -91,17 +91,20 @@ export function AdminCalendarView({ entries, periodStart, periodEnd, isLocked, t
               </span>
 
               {/* Employee entry chips */}
-              <div className="flex flex-col gap-0.5">
+              <div className="flex flex-col gap-1">
                 {dayEntries.map((e) => (
                   <div
                     key={e.id}
-                    className="flex items-center justify-between gap-1 rounded bg-muted/60 px-1 py-0.5 group"
+                    className="flex items-start justify-between gap-1 rounded bg-muted/60 px-2 py-1.5 group"
                   >
-                    <div className="flex flex-col min-w-0">
-                      <span className="text-[10px] font-medium leading-tight truncate">
+                    <div className="flex flex-col min-w-0 gap-0.5">
+                      <span className="text-xs font-medium leading-snug truncate">
                         {e.user.name.split(" ")[0]}
                       </span>
-                      <span className="text-[9px] text-muted-foreground leading-tight font-mono">
+                      <span className="text-xs text-muted-foreground leading-snug font-mono">
+                        {e.startTime} – {e.endTime}
+                      </span>
+                      <span className="text-xs font-semibold leading-snug">
                         {formatHours(e.paidHours)}
                       </span>
                     </div>

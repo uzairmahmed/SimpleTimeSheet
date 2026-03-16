@@ -30,7 +30,6 @@ const schema = z
   .object({
     startTime: z.string().regex(/^\d{2}:\d{2}$/, "Required"),
     endTime: z.string().regex(/^\d{2}:\d{2}$/, "Required"),
-    paidHoursOverride: z.number().min(0).optional().nullable(),
     notes: z.string().optional(),
   })
   .refine((d) => d.endTime > d.startTime, {
@@ -58,7 +57,6 @@ export function AdjustmentDialog({ entry }: { entry: Entry }) {
     defaultValues: {
       startTime: entry.startTime,
       endTime: entry.endTime,
-      paidHoursOverride: null,
       notes: "",
     },
   });
@@ -125,34 +123,6 @@ export function AdjustmentDialog({ entry }: { entry: Entry }) {
                 )}
               />
             </div>
-            <FormField
-              control={form.control}
-              name="paidHoursOverride"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Override Paid Hours{" "}
-                    <span className="text-xs font-normal text-muted-foreground">
-                      (leave blank to auto-calculate)
-                    </span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      step="0.25"
-                      min="0"
-                      placeholder="e.g. 7.5"
-                      disabled={pending}
-                      value={field.value == null || isNaN(Number(field.value)) ? "" : field.value}
-                      onChange={(e) =>
-                        field.onChange(e.target.value === "" ? null : e.target.valueAsNumber)
-                      }
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <FormField
               control={form.control}
               name="notes"

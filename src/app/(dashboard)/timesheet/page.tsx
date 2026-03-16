@@ -2,11 +2,6 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { formatHours } from "@/lib/timesheetCalc";
-import { Lock } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { EntryFormDialog } from "./_components/EntryFormDialog";
-import { PeriodNav } from "./_components/PeriodNav";
 import { TimesheetTabs } from "./_components/TimesheetTabs";
 
 type SearchParams = { period?: string };
@@ -40,18 +35,10 @@ export default async function TimesheetPage({
   const isCurrentPeriod = viewedPeriod?.id === currentPeriod?.id;
 
   // ─── Fetch entries for this period ───────────────────────────────────────────
-  const [entries, user] = await Promise.all([
-    prisma.timesheetEntry.findMany({
-      where: { userId, date: { gte: periodStart, lte: periodEnd } },
-      orderBy: { date: "asc" },
-    }),
-    prisma.user.findUnique({
-      where: { id: userId },
-      select: { wageRate: true },
-    }),
-  ]);
-
-  const wageRate = Number(user?.wageRate ?? 0);
+  const entries = await prisma.timesheetEntry.findMany({
+    where: { userId, date: { gte: periodStart, lte: periodEnd } },
+    orderBy: { date: "asc" },
+  });
 
   const serializedEntries = entries.map((e) => ({
     ...e,
@@ -68,30 +55,11 @@ export default async function TimesheetPage({
   }));
 
   return (
-    <div className="space-y-4 max-w-6xl">
+    <div className="space-y-8 max-w-6xl mx-auto">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold">My Timesheet</h1>
         <p className="text-muted-foreground text-sm mt-0.5">{session.user.name}</p>
-      </div>
-
-      {/* Period navigation + status + add button */}
-      <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-        <PeriodNav
-          periods={periods}
-          currentStart={periodStart}
-          isLocked={isLocked}
-        />
-        <div className="flex items-center gap-2">
-          {isCurrentPeriod && !isLocked && (
-            <Badge variant="secondary">Current Period</Badge>
-          )}
-        </div>
-        <div className="sm:ml-auto">
-          {!isLocked && isCurrentPeriod && (
-            <EntryFormDialog mode="add" currentPeriodStart={periodStart} />
-          )}
-        </div>
       </div>
 
       {/* No period state */}
@@ -110,7 +78,9 @@ export default async function TimesheetPage({
           isLocked={isLocked}
           today={today}
           totalPaidHours={totalPaidHours}
-          wageRate={wageRate}
+          periods={periods}
+          currentStart={periodStart}
+          isCurrentPeriod={isCurrentPeriod}
         />
       )}
     </div>

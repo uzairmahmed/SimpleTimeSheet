@@ -25,7 +25,6 @@ type Props = {
   entries: Entry[];
   isLocked: boolean;
   totalPaidHours: number;
-  wageRate: number;
 };
 
 const DAY = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -45,13 +44,11 @@ export function TimesheetTable({
   entries,
   isLocked,
   totalPaidHours,
-  wageRate,
 }: Props) {
-  const totalPay = totalPaidHours * wageRate;
 
   return (
     <div className="rounded-md border overflow-hidden">
-      <Table>
+      <Table className="text-base">
         <TableHeader>
           <TableRow>
             <TableHead className="w-[90px]">Day</TableHead>
@@ -75,7 +72,7 @@ export function TimesheetTable({
             </TableRow>
           ) : (
             entries.map((e) => (
-              <TableRow key={e.id}>
+              <TableRow key={e.id} className="h-16">
                 <TableCell className="font-medium text-muted-foreground">
                   {dayLabel(e.date)}
                 </TableCell>
@@ -84,14 +81,12 @@ export function TimesheetTable({
                 <TableCell>{fmtTime(e.endTime)}</TableCell>
                 <TableCell className="text-center">
                   {e.breakMinutes > 0 ? (
-                    <Badge variant="secondary" className="text-xs">
-                      30 min
-                    </Badge>
+                    <Badge variant="secondary">30 min</Badge>
                   ) : (
-                    <span className="text-muted-foreground text-xs">—</span>
+                    <span className="text-muted-foreground">—</span>
                   )}
                 </TableCell>
-                <TableCell className="text-right font-mono">
+                <TableCell className="text-right font-mono font-semibold">
                   {formatHours(e.paidHours)}
                 </TableCell>
                 {!isLocked && (
@@ -128,20 +123,6 @@ export function TimesheetTable({
               </TableCell>
               {!isLocked && <TableCell />}
             </TableRow>
-            {wageRate > 0 && (
-              <TableRow>
-                <TableCell
-                  colSpan={isLocked ? 5 : 6}
-                  className="text-right text-muted-foreground text-sm"
-                >
-                  Estimated Pay (${wageRate.toFixed(2)}/hr)
-                </TableCell>
-                <TableCell className="text-right font-mono font-semibold text-primary">
-                  ${totalPay.toFixed(2)}
-                </TableCell>
-                {!isLocked && <TableCell />}
-              </TableRow>
-            )}
           </TableFooter>
         )}
       </Table>
