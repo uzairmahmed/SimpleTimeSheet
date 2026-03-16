@@ -61,7 +61,7 @@ export function LoginForm() {
     }
 
     router.push("/");
-    router.refresh();
+    router.refresh(); // homepage redirects authenticated users to their area
   }
 
   return (

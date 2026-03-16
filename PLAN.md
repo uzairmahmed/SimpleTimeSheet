@@ -61,14 +61,14 @@
 - [X] Calendar view must be two weeks at a time, with arrows to navigate between periods. When navigating to a new period, the view should automatically scroll to the current date if it falls within that period.
 
 ## Phase 8: Flow:
-- [ ] Navigation
+- [X] Navigation
     - Homepage is the "who are you" page
     - When a user logs out, the page should redirect to the "who are you page" not LOGIN
-- [ ] Follow a top navbar style view only. 
+- [X] Follow a top navbar style view only.
     - in the homepage: show the "Smiline Timesheet" with icon, and Admin sign in button in top right, page title in the middle ("User Selection" or something).
     - in the employee view, get rid of the sidebar, use top nav only. show the "Smiline Timesheet" with icon, EMPLOYEE, "My Timesheet" in the middle, "Firstname Lastname", and a sign out icon button
     - in the admin view, get rid of the sidebar, use top nav only. show the "Smiline Timesheet" with icon, ADMIN, nav links for each page, "Firstname Lastname", and a sign out icon button.
-- [ ] Remove the need for separate login page. Just have the login form as a modal that appears.
+- [X] Remove the need for separate login page. Just have the login form as a modal that appears.
 
 ## Phase 9: Prettyfying & UX Improvements
 - [ ] Main page elements should be centered and use the full width of the page more effectively, reducing excessive whitespace.
