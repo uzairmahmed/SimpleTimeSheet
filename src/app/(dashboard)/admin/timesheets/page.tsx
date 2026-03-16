@@ -3,11 +3,7 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import {
-  getPayPeriodRange,
-  formatPeriodLabel,
-  formatHours,
-} from "@/lib/timesheetCalc";
+import { formatPeriodLabel, formatHours } from "@/lib/timesheetCalc";
 import { Badge } from "@/components/ui/badge";
 import { EmployeeFilter, PeriodFilter } from "./_components/EmployeeFilter";
 import { AdminAddEntryDialog } from "./_components/AdminEntryFormDialog";
@@ -23,32 +19,29 @@ export default async function AdminTimesheetsPage({
   const session = await getServerSession(authOptions);
   if (session?.user.role !== "ADMIN") redirect("/unauthorized");
 
-  // ─── Compute available periods ─────────────────────────────────────────────
-  const currentRange = getPayPeriodRange(new Date());
+  const today = new Date().toISOString().slice(0, 10);
 
-  const allDates = await prisma.timesheetEntry.findMany({
-    select: { date: true },
-    distinct: ["date"],
+  // ─── All pay periods from DB ──────────────────────────────────────────────
+  const allPeriods = await prisma.payPeriod.findMany({
+    orderBy: { startDate: "desc" },
   });
 
-  const periodMap = new Map<string, string>();
-  periodMap.set(currentRange.start, currentRange.end);
-  for (const { date } of allDates) {
-    const r = getPayPeriodRange(new Date(date + "T12:00:00"));
-    periodMap.set(r.start, r.end);
-  }
-  const periods = Array.from(periodMap.entries())
-    .map(([start, end]) => ({ start, end }))
-    .sort((a, b) => b.start.localeCompare(a.start));
+  const currentPeriod = allPeriods.find(
+    (p) => p.startDate <= today && p.endDate >= today
+  );
 
-  const periodStart = searchParams.period ?? currentRange.start;
-  const periodEnd = (() => {
-    const d = new Date(periodStart + "T12:00:00");
-    d.setDate(d.getDate() + 6);
-    return d.toISOString().slice(0, 10);
-  })();
+  const periods = allPeriods.map((p) => ({ start: p.startDate, end: p.endDate }));
 
-  // ─── Fetch employees ───────────────────────────────────────────────────────
+  const periodStart = searchParams.period ?? currentPeriod?.startDate ?? today;
+  const viewedPeriod = allPeriods.find((p) => p.startDate === periodStart);
+  const periodEnd = viewedPeriod?.endDate ?? periodStart;
+  const isLocked = viewedPeriod?.isLocked ?? false;
+
+  const periodLabel = viewedPeriod
+    ? formatPeriodLabel(periodStart, periodEnd)
+    : periodStart;
+
+  // ─── Employees ────────────────────────────────────────────────────────────
   const employees = await prisma.user.findMany({
     where: { role: "EMPLOYEE" },
     select: { id: true, name: true },
@@ -57,7 +50,7 @@ export default async function AdminTimesheetsPage({
 
   const employeeId = searchParams.employee;
 
-  // ─── Fetch entries ─────────────────────────────────────────────────────────
+  // ─── Entries ──────────────────────────────────────────────────────────────
   const rawEntries = await prisma.timesheetEntry.findMany({
     where: {
       date: { gte: periodStart, lte: periodEnd },
@@ -72,13 +65,7 @@ export default async function AdminTimesheetsPage({
     paidHours: Number(e.paidHours),
   }));
 
-  const payPeriod = await prisma.payPeriod.findUnique({
-    where: { startDate_endDate: { startDate: periodStart, endDate: periodEnd } },
-  });
-  const isLocked = payPeriod?.isLocked ?? false;
-
   const totalPaidHours = entries.reduce((sum, e) => sum + e.paidHours, 0);
-  const periodLabel = formatPeriodLabel(periodStart, periodEnd);
 
   return (
     <div className="space-y-4 max-w-5xl">
@@ -93,7 +80,7 @@ export default async function AdminTimesheetsPage({
       <div className="flex flex-col sm:flex-row sm:items-center gap-2 flex-wrap">
         <Suspense>
           <EmployeeFilter employees={employees} />
-          <PeriodFilter periods={periods} />
+          <PeriodFilter periods={periods} currentStart={periodStart} />
         </Suspense>
         <div className="flex items-center gap-2 sm:ml-auto">
           {isLocked && (
@@ -105,15 +92,19 @@ export default async function AdminTimesheetsPage({
         </div>
       </div>
 
-      {/* Calendar + List tabs */}
+      {/* Tabs */}
       <AdminTimesheetTabs
         entries={entries}
         periodStart={periodStart}
+        periodEnd={periodEnd}
         isLocked={isLocked}
         totalPaidHours={totalPaidHours}
+        today={today}
       />
 
-      <p className="text-xs text-muted-foreground">Period: {periodLabel} · Total: {formatHours(totalPaidHours)}</p>
+      <p className="text-xs text-muted-foreground">
+        Period: {periodLabel} · Total: {formatHours(totalPaidHours)}
+      </p>
     </div>
   );
 }

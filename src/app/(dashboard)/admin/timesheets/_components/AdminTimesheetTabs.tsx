@@ -18,15 +18,19 @@ type Entry = {
 type Props = {
   entries: Entry[];
   periodStart: string;
+  periodEnd: string;
   isLocked: boolean;
   totalPaidHours: number;
+  today: string;
 };
 
 export function AdminTimesheetTabs({
   entries,
   periodStart,
+  periodEnd,
   isLocked,
   totalPaidHours,
+  today,
 }: Props) {
   return (
     <Tabs defaultValue="calendar">
@@ -45,7 +49,9 @@ export function AdminTimesheetTabs({
         <AdminCalendarView
           entries={entries}
           periodStart={periodStart}
+          periodEnd={periodEnd}
           isLocked={isLocked}
+          today={today}
         />
       </TabsContent>
 

@@ -54,13 +54,13 @@
 - [X] Add a "Pay Period Summary" section to the admin dashboard showing total hours and payroll cost for the current period, with a breakdown by employee.
 - [X] Employee list view should be as follows: Each row represents a day, 1 column for day, date, Start, end, break, paid hours. Admin consolidated list view will be the same except the start,end,break,paidhrs columns will be repeated, grouped by each employee.
 
-## Phase 7: Pay period management refinement (claude --resume 64dfa825-1882-41a4-bd70-502535650c89)
-- [ ] Pay periods have to be created manually by admin, with a "Create New Pay Period" button that automatically sets the start date to the next day after the last period's end date, and the end date to 14 days later. Admin can adjust these dates before confirming creation.
-- [ ] When a pay period is locked, all timesheet entries within that period become read-only for employees, and admins can only make adjustments through a special "Adjustment" interface that logs all changes for audit purposes.
-- [ ] Add visual indicators in the calendar view for locked periods (e.g., grayed out, lock icon) and tooltips explaining the locked status, employees and admins can still flip back in the calendar to view past periods, but they will be read-only.
-- [ ] Calendar view must be two weeks at a time, with arrows to navigate between periods. When navigating to a new period, the view should automatically scroll to the current date if it falls within that period.
+## Phase 7: Pay period management refinement
+- [X] Pay periods have to be created manually by admin, with a "Create New Pay Period" button that automatically sets the start date to the next day after the last period's end date, and the end date to 14 days later. Admin can adjust these dates before confirming creation.
+- [X] When a pay period is locked, all timesheet entries within that period become read-only for employees, and admins can only make adjustments through a special "Adjustment" interface that logs all changes for audit purposes.
+- [X] Add visual indicators in the calendar view for locked periods (e.g., grayed out, lock icon) and tooltips explaining the locked status, employees and admins can still flip back in the calendar to view past periods, but they will be read-only.
+- [X] Calendar view must be two weeks at a time, with arrows to navigate between periods. When navigating to a new period, the view should automatically scroll to the current date if it falls within that period.
 
-## Phase 8: Finalization:
+## Phase 8: Flow:
 - [ ] Navigation
     - Homepage is the "who are you" page
     - When a user logs out, the page should redirect to the "who are you page" not LOGIN

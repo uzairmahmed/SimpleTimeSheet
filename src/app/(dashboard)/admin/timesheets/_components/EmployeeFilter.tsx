@@ -49,7 +49,7 @@ export function EmployeeFilter({ employees }: { employees: Employee[] }) {
   );
 }
 
-export function PeriodFilter({ periods }: { periods: Period[] }) {
+export function PeriodFilter({ periods, currentStart }: { periods: Period[]; currentStart?: string }) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -61,7 +61,7 @@ export function PeriodFilter({ periods }: { periods: Period[] }) {
 
   return (
     <Select
-      value={searchParams.get("period") ?? (periods[0]?.start ?? "")}
+      value={searchParams.get("period") ?? currentStart ?? (periods[0]?.start ?? "")}
       onValueChange={(v) => setParam("period", v)}
     >
       <SelectTrigger className="w-full sm:w-64">

@@ -35,7 +35,7 @@ export function TimesheetTabs({
 }: Props) {
   return (
     <Tabs defaultValue="calendar">
-      <TabsList className="mb-4">
+      <TabsList className="mb-3">
         <TabsTrigger value="calendar" className="gap-1.5">
           <CalendarDays className="h-3.5 w-3.5" />
           Calendar

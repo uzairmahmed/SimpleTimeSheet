@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { getPayPeriodRange, formatPeriodLabel, formatHours } from "@/lib/timesheetCalc";
+import { formatPeriodLabel, formatHours } from "@/lib/timesheetCalc";
 import { Users, ClipboardList, CalendarDays, ArrowRight } from "lucide-react";
 import {
   Card,
@@ -27,25 +27,31 @@ export default async function AdminDashboardPage() {
   const session = await getServerSession(authOptions);
   if (session?.user.role !== "ADMIN") redirect("/unauthorized");
 
-  const { start, end } = getPayPeriodRange(new Date());
-  const currentPeriodLabel = formatPeriodLabel(start, end);
+  const today = new Date().toISOString().slice(0, 10);
 
-  const [employeeCount, entryCount, periodCount, currentPeriod] = await Promise.all([
+  const [employeeCount, entryCount, periodCount, allPeriods, employees] = await Promise.all([
     prisma.user.count({ where: { role: "EMPLOYEE" } }),
     prisma.timesheetEntry.count(),
     prisma.payPeriod.count(),
-    prisma.payPeriod.findUnique({
-      where: { startDate_endDate: { startDate: start, endDate: end } },
+    prisma.payPeriod.findMany({ orderBy: { startDate: "desc" } }),
+    prisma.user.findMany({
+      where: { role: "EMPLOYEE" },
+      select: { id: true, name: true, wageRate: true },
+      orderBy: { name: "asc" },
     }),
   ]);
 
-  // ─── Pay Period Summary ────────────────────────────────────────────────────
-  const employees = await prisma.user.findMany({
-    where: { role: "EMPLOYEE" },
-    select: { id: true, name: true, wageRate: true },
-    orderBy: { name: "asc" },
-  });
+  // Current period = the one that contains today
+  const currentPeriod = allPeriods.find(
+    (p) => p.startDate <= today && p.endDate >= today
+  );
+  const start = currentPeriod?.startDate ?? today;
+  const end = currentPeriod?.endDate ?? today;
+  const currentPeriodLabel = currentPeriod
+    ? formatPeriodLabel(start, end)
+    : "No active period";
 
+  // ─── Pay Period Summary ────────────────────────────────────────────────────
   const periodEntries = await prisma.timesheetEntry.findMany({
     where: { date: { gte: start, lte: end } },
     select: { userId: true, paidHours: true },
